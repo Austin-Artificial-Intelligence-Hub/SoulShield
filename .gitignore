@@ -1,8 +1,46 @@
 # IDEs
 .idea/
+.vscode/
 
-# Hugo
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+soul-env/
+venv/
+env/
+
+# AWS CDK
+cdk.out/
+*.js
+*.d.ts
+node_modules/
+
+# Lambda Layer (build artifacts)
+lambda/layer/python/
+
+# Environment variables
+.env
+
+# Hugo (legacy)
 /resources/
 public/
 jsconfig.json
-node_modules/
