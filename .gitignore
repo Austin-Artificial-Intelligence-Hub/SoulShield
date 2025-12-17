@@ -1,0 +1,51 @@
+# Python
+venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+
+# Environment variables
+.env
+
+# AWS CDK
+cdk.out/
+.cdk.staging/
+node_modules/
+
+# Lambda layer (built files)
+lambda/layer/python/
+
+# Logs
+*.log
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Credentials and sensitive files
+YOUR_CREDENTIALS.txt
+get_api_key.py
+test_bedrock.py
+
+# Temporary files
+*.tmp
+*.temp
+
+# Exclude test directories
+Kiro-test/
+enhanced_memory_design.md
+ENABLE_BEDROCK.md
+run_chatbot.sh
