@@ -4,11 +4,20 @@ Streamlit Chat Interface for Privacy-Focused Chatbot
 A general-purpose conversational AI for customer service, education, etc.
 """
 
+import os
 import streamlit as st
 import requests
 import json
 from datetime import datetime
 import uuid
+from dotenv import load_dotenv
+
+# Load environment variables
+load_dotenv()
+
+# Get API config from environment (with fallback to empty for manual entry)
+DEFAULT_API_URL = os.getenv('API_URL', '')
+DEFAULT_API_KEY = os.getenv('API_KEY', '')
 
 # Page config
 st.set_page_config(
@@ -116,26 +125,33 @@ if 'show_login' not in st.session_state:
 
 # Sidebar for configuration and authentication
 with st.sidebar:
-    st.title("⚙️ Configuration")
-    
-    api_url = st.text_input(
-        "API URL",
-        value=st.session_state.get('api_url', ''),
-        placeholder="https://your-api.execute-api.region.amazonaws.com/prod/",
-        help="Your AWS API Gateway URL"
-    )
-    
-    api_key = st.text_input(
-        "API Key",
-        value=st.session_state.get('api_key', ''),
-        type="password",
-        placeholder="Enter your API key",
-        help="Your API Gateway API key"
-    )
-    
-    # Save to session state
-    st.session_state.api_url = api_url
-    st.session_state.api_key = api_key
+    # Only show config section if not configured via .env
+    if not DEFAULT_API_URL or not DEFAULT_API_KEY:
+        st.title("⚙️ Configuration")
+        
+        api_url = st.text_input(
+            "API URL",
+            value=st.session_state.get('api_url', DEFAULT_API_URL),
+            placeholder="https://your-api.execute-api.region.amazonaws.com/prod/",
+            help="Your AWS API Gateway URL"
+        )
+        
+        api_key = st.text_input(
+            "API Key",
+            value=st.session_state.get('api_key', DEFAULT_API_KEY),
+            type="password",
+            placeholder="Enter your API key",
+            help="Your API Gateway API key"
+        )
+        
+        # Save to session state
+        st.session_state.api_url = api_url
+        st.session_state.api_key = api_key
+    else:
+        # Use values from .env
+        api_url = DEFAULT_API_URL
+        api_key = DEFAULT_API_KEY
+        st.success("✅ API configured from .env")
     
     st.divider()
     

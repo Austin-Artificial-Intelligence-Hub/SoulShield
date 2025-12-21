@@ -1,0 +1,1067 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SoulShield - Mental Health Support</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cream: #FAF8F5;
+            --cream-dark: #F5F0EA;
+            --sage: #8B9A7D;
+            --sage-light: #A8B89A;
+            --sage-dark: #6B7A5D;
+            --charcoal: #2C3E50;
+            --charcoal-light: #4A5568;
+            --warm-white: #FFFDF9;
+            --accent: #D4A574;
+            --accent-light: #E8C9A8;
+            --text: #3D4852;
+            --text-light: #718096;
+            --border: #E2DED8;
+            --shadow: rgba(139, 154, 125, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--cream);
+            color: var(--text);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        /* Header */
+        .header {
+            background: var(--warm-white);
+            border-bottom: 1px solid var(--border);
+            padding: 1rem 2rem;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.75rem;
+            font-weight: 500;
+            color: var(--charcoal);
+            letter-spacing: -0.02em;
+        }
+
+        .logo span {
+            color: var(--sage);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-link {
+            color: var(--text-light);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .nav-link:hover {
+            color: var(--sage);
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-name {
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+
+        .btn-logout {
+            background: transparent;
+            border: 1px solid var(--border);
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            color: var(--text-light);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-logout:hover {
+            border-color: var(--sage);
+            color: var(--sage);
+        }
+
+        /* Main Layout */
+        .main-container {
+            display: flex;
+            min-height: 100vh;
+            padding-top: 65px;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 320px;
+            background: var(--warm-white);
+            border-right: 1px solid var(--border);
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar-section {
+            margin-bottom: 2rem;
+        }
+
+        .sidebar-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--charcoal);
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .session-info {
+            font-size: 0.85rem;
+            color: var(--text-light);
+        }
+
+        .session-info p {
+            margin-bottom: 0.5rem;
+        }
+
+        .btn-new-session {
+            width: 100%;
+            background: var(--sage);
+            color: white;
+            border: none;
+            padding: 0.875rem 1.5rem;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-top: 1rem;
+        }
+
+        .btn-new-session:hover {
+            background: var(--sage-dark);
+            transform: translateY(-1px);
+        }
+
+        .privacy-notice {
+            margin-top: auto;
+            padding: 1.25rem;
+            background: var(--cream);
+            border-radius: 12px;
+            font-size: 0.8rem;
+            color: var(--text-light);
+        }
+
+        .privacy-notice h4 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--charcoal);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .privacy-notice ul {
+            list-style: none;
+        }
+
+        .privacy-notice li {
+            margin-bottom: 0.4rem;
+            padding-left: 1rem;
+            position: relative;
+        }
+
+        .privacy-notice li::before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: var(--sage);
+        }
+
+        /* Chat Area */
+        .chat-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .chat-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .chat-header h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2.25rem;
+            font-weight: 500;
+            color: var(--charcoal);
+            margin-bottom: 0.5rem;
+        }
+
+        .chat-header p {
+            color: var(--text-light);
+            font-size: 1rem;
+        }
+
+        .messages-container {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1rem 0;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .message {
+            display: flex;
+            gap: 1rem;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .message-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            flex-shrink: 0;
+        }
+
+        .message.user .message-avatar {
+            background: var(--accent-light);
+        }
+
+        .message.assistant .message-avatar {
+            background: var(--sage-light);
+        }
+
+        .message-content {
+            flex: 1;
+            max-width: 600px;
+        }
+
+        .message.user .message-content {
+            margin-left: auto;
+        }
+
+        .message-bubble {
+            padding: 1rem 1.25rem;
+            border-radius: 16px;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .message.user .message-bubble {
+            background: var(--sage);
+            color: white;
+            border-bottom-right-radius: 4px;
+        }
+
+        .message.assistant .message-bubble {
+            background: var(--warm-white);
+            border: 1px solid var(--border);
+            border-bottom-left-radius: 4px;
+        }
+
+        .message-time {
+            font-size: 0.75rem;
+            color: var(--text-light);
+            margin-top: 0.5rem;
+            padding: 0 0.25rem;
+        }
+
+        .message.user .message-time {
+            text-align: right;
+        }
+
+        .message-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 0.75rem;
+        }
+
+        .option-btn {
+            background: var(--cream);
+            border: 1px solid var(--border);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            color: var(--text);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .option-btn:hover {
+            background: var(--sage-light);
+            border-color: var(--sage);
+            color: white;
+        }
+
+        /* Chat Input */
+        .chat-input-container {
+            padding: 1.5rem 0;
+            border-top: 1px solid var(--border);
+            margin-top: auto;
+        }
+
+        .chat-input-wrapper {
+            display: flex;
+            gap: 1rem;
+            align-items: flex-end;
+        }
+
+        .chat-input {
+            flex: 1;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1rem 1.25rem;
+            font-size: 0.95rem;
+            font-family: inherit;
+            resize: none;
+            min-height: 50px;
+            max-height: 150px;
+            background: var(--warm-white);
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .chat-input:focus {
+            outline: none;
+            border-color: var(--sage);
+            box-shadow: 0 0 0 3px var(--shadow);
+        }
+
+        .chat-input::placeholder {
+            color: var(--text-light);
+        }
+
+        .btn-send {
+            background: var(--sage);
+            color: white;
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-send:hover {
+            background: var(--sage-dark);
+            transform: translateY(-1px);
+        }
+
+        .btn-send:disabled {
+            background: var(--border);
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-send svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        /* Auth Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            backdrop-filter: blur(4px);
+        }
+
+        .modal {
+            background: var(--warm-white);
+            border-radius: 20px;
+            padding: 3rem;
+            width: 100%;
+            max-width: 420px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+            animation: modalIn 0.3s ease;
+        }
+
+        @keyframes modalIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .modal h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.75rem;
+            font-weight: 500;
+            color: var(--charcoal);
+            text-align: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .modal p {
+            text-align: center;
+            color: var(--text-light);
+            margin-bottom: 2rem;
+            font-size: 0.95rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.25rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--text);
+            margin-bottom: 0.5rem;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 0.875rem 1rem;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            font-size: 0.95rem;
+            font-family: inherit;
+            background: var(--cream);
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--sage);
+            box-shadow: 0 0 0 3px var(--shadow);
+        }
+
+        .btn-primary {
+            width: 100%;
+            background: var(--sage);
+            color: white;
+            border: none;
+            padding: 1rem;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-top: 0.5rem;
+        }
+
+        .btn-primary:hover {
+            background: var(--sage-dark);
+        }
+
+        .btn-primary:disabled {
+            background: var(--border);
+            cursor: not-allowed;
+        }
+
+        .auth-toggle {
+            text-align: center;
+            margin-top: 1.5rem;
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+
+        .auth-toggle a {
+            color: var(--sage);
+            text-decoration: none;
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        .auth-toggle a:hover {
+            text-decoration: underline;
+        }
+
+        .error-message {
+            background: #FEE2E2;
+            color: #991B1B;
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Loading States */
+        .typing-indicator {
+            display: flex;
+            gap: 4px;
+            padding: 0.5rem 0;
+        }
+
+        .typing-indicator span {
+            width: 8px;
+            height: 8px;
+            background: var(--sage-light);
+            border-radius: 50%;
+            animation: bounce 1.4s infinite ease-in-out;
+        }
+
+        .typing-indicator span:nth-child(1) { animation-delay: -0.32s; }
+        .typing-indicator span:nth-child(2) { animation-delay: -0.16s; }
+
+        @keyframes bounce {
+            0%, 80%, 100% { transform: scale(0); }
+            40% { transform: scale(1); }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .sidebar {
+                display: none;
+            }
+
+            .chat-container {
+                padding: 1rem;
+            }
+
+            .header {
+                padding: 1rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+        }
+
+        /* Welcome State */
+        .welcome-state {
+            text-align: center;
+            padding: 4rem 2rem;
+        }
+
+        .welcome-state h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2rem;
+            font-weight: 500;
+            color: var(--charcoal);
+            margin-bottom: 1rem;
+        }
+
+        .welcome-state p {
+            color: var(--text-light);
+            max-width: 400px;
+            margin: 0 auto 2rem;
+        }
+
+        .quick-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            justify-content: center;
+        }
+
+        .quick-action {
+            background: var(--warm-white);
+            border: 1px solid var(--border);
+            padding: 0.75rem 1.25rem;
+            border-radius: 25px;
+            font-size: 0.9rem;
+            color: var(--text);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .quick-action:hover {
+            background: var(--sage);
+            border-color: var(--sage);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        /* Summaries */
+        .summaries-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .summary-item {
+            background: var(--cream);
+            padding: 1rem;
+            border-radius: 10px;
+            font-size: 0.85rem;
+            color: var(--text);
+            line-height: 1.5;
+        }
+
+        .summary-date {
+            font-size: 0.75rem;
+            color: var(--text-light);
+            margin-bottom: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="logo">Soul<span>Shield</span></div>
+        <nav class="nav-links">
+            <a href="#" class="nav-link">About</a>
+            <a href="#" class="nav-link">How it works</a>
+            <a href="#" class="nav-link">Privacy</a>
+        </nav>
+        <div class="user-info" id="userInfo" style="display: none;">
+            <span class="user-name" id="userName"></span>
+            <button class="btn-logout" onclick="logout()">Logout</button>
+        </div>
+    </header>
+
+    <main class="main-container">
+        <aside class="sidebar" id="sidebar" style="display: none;">
+            <div class="sidebar-section">
+                <h3 class="sidebar-title">Session</h3>
+                <div class="session-info">
+                    <p>Session ID: <span id="sessionIdDisplay">-</span></p>
+                    <p>Messages: <span id="messageCount">0</span></p>
+                </div>
+                <button class="btn-new-session" onclick="newSession()">
+                    ✨ Start New Session
+                </button>
+            </div>
+
+            <div class="sidebar-section">
+                <h3 class="sidebar-title">Past Sessions</h3>
+                <div class="summaries-list" id="summariesList">
+                    <p style="font-size: 0.85rem; color: var(--text-light);">No previous sessions yet</p>
+                </div>
+            </div>
+
+            <div class="privacy-notice">
+                <h4>🔒 Your Privacy</h4>
+                <ul>
+                    <li>Messages encrypted in transit</li>
+                    <li>Auto-deleted after 30 days</li>
+                    <li>Secure password hashing</li>
+                    <li>No data sharing</li>
+                </ul>
+            </div>
+        </aside>
+
+        <div class="chat-container">
+            <div class="chat-header">
+                <h1>How are you feeling today?</h1>
+                <p>A safe space to talk, reflect, and find support</p>
+            </div>
+
+            <div class="messages-container" id="messagesContainer">
+                <div class="welcome-state" id="welcomeState">
+                    <h2>Welcome to SoulShield</h2>
+                    <p>I'm here to listen and support you. Feel free to share whatever is on your mind.</p>
+                    <div class="quick-actions">
+                        <button class="quick-action" onclick="sendQuickMessage('I need someone to talk to')">I need someone to talk to</button>
+                        <button class="quick-action" onclick="sendQuickMessage('I feel stressed lately')">I feel stressed lately</button>
+                        <button class="quick-action" onclick="sendQuickMessage('Help me calm down')">Help me calm down</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chat-input-container">
+                <div class="chat-input-wrapper">
+                    <textarea 
+                        class="chat-input" 
+                        id="chatInput" 
+                        placeholder="Share what's on your mind..."
+                        rows="1"
+                        onkeydown="handleKeyDown(event)"
+                    ></textarea>
+                    <button class="btn-send" id="sendBtn" onclick="sendMessage()">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Auth Modal -->
+    <div class="modal-overlay" id="authModal">
+        <div class="modal">
+            <h2 id="authTitle">Welcome Back</h2>
+            <p id="authSubtitle">Sign in to continue your journey</p>
+            
+            <div class="error-message" id="authError" style="display: none;"></div>
+            
+            <form id="authForm" onsubmit="handleAuth(event)">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" placeholder="Enter your username" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" placeholder="Enter your password" required>
+                </div>
+                <button type="submit" class="btn-primary" id="authBtn">Sign In</button>
+            </form>
+            
+            <div class="auth-toggle">
+                <span id="authToggleText">Don't have an account?</span>
+                <a onclick="toggleAuthMode()" id="authToggleLink">Create one</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Configuration
+        const API_URL = 'https://pypwr35xf3.execute-api.us-east-1.amazonaws.com/prod';
+        const API_KEY = 'TH3v503YHz7mnYUzPT6Gd5Z2tI4mmKdS457F9sgo';
+
+        // State
+        let state = {
+            isLoggedIn: false,
+            username: '',
+            token: '',
+            sessionId: generateSessionId(),
+            messages: [],
+            isRegisterMode: false
+        };
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedState = localStorage.getItem('soulshield_state');
+            if (savedState) {
+                const parsed = JSON.parse(savedState);
+                if (parsed.token) {
+                    state = { ...state, ...parsed };
+                    onLoginSuccess();
+                }
+            }
+            autoResizeTextarea();
+        });
+
+        function generateSessionId() {
+            return 'session-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9);
+        }
+
+        function saveState() {
+            localStorage.setItem('soulshield_state', JSON.stringify({
+                username: state.username,
+                token: state.token
+            }));
+        }
+
+        // Auth
+        function toggleAuthMode() {
+            state.isRegisterMode = !state.isRegisterMode;
+            document.getElementById('authTitle').textContent = state.isRegisterMode ? 'Create Account' : 'Welcome Back';
+            document.getElementById('authSubtitle').textContent = state.isRegisterMode ? 'Join us on your wellness journey' : 'Sign in to continue your journey';
+            document.getElementById('authBtn').textContent = state.isRegisterMode ? 'Create Account' : 'Sign In';
+            document.getElementById('authToggleText').textContent = state.isRegisterMode ? 'Already have an account?' : "Don't have an account?";
+            document.getElementById('authToggleLink').textContent = state.isRegisterMode ? 'Sign in' : 'Create one';
+            document.getElementById('authError').style.display = 'none';
+        }
+
+        async function handleAuth(e) {
+            e.preventDefault();
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value;
+            const btn = document.getElementById('authBtn');
+            const error = document.getElementById('authError');
+
+            btn.disabled = true;
+            btn.textContent = 'Please wait...';
+            error.style.display = 'none';
+
+            try {
+                const endpoint = state.isRegisterMode ? '/auth/register' : '/auth/login';
+                const response = await fetch(API_URL + endpoint, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'x-api-key': API_KEY
+                    },
+                    body: JSON.stringify({ username, password })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    if (state.isRegisterMode) {
+                        state.isRegisterMode = false;
+                        toggleAuthMode();
+                        error.style.display = 'block';
+                        error.style.background = '#D1FAE5';
+                        error.style.color = '#065F46';
+                        error.textContent = 'Account created! Please sign in.';
+                    } else {
+                        state.token = data.token;
+                        state.username = username;
+                        state.isLoggedIn = true;
+                        saveState();
+                        onLoginSuccess();
+                    }
+                } else {
+                    error.style.display = 'block';
+                    error.style.background = '#FEE2E2';
+                    error.style.color = '#991B1B';
+                    error.textContent = data.error || 'Something went wrong';
+                }
+            } catch (err) {
+                error.style.display = 'block';
+                error.textContent = 'Connection error. Please try again.';
+            }
+
+            btn.disabled = false;
+            btn.textContent = state.isRegisterMode ? 'Create Account' : 'Sign In';
+        }
+
+        function onLoginSuccess() {
+            document.getElementById('authModal').style.display = 'none';
+            document.getElementById('sidebar').style.display = 'flex';
+            document.getElementById('userInfo').style.display = 'flex';
+            document.getElementById('userName').textContent = state.username;
+            document.getElementById('sessionIdDisplay').textContent = state.sessionId.substr(0, 8) + '...';
+            loadSummaries();
+        }
+
+        function logout() {
+            state = {
+                isLoggedIn: false,
+                username: '',
+                token: '',
+                sessionId: generateSessionId(),
+                messages: [],
+                isRegisterMode: false
+            };
+            localStorage.removeItem('soulshield_state');
+            document.getElementById('authModal').style.display = 'flex';
+            document.getElementById('sidebar').style.display = 'none';
+            document.getElementById('userInfo').style.display = 'none';
+            document.getElementById('messagesContainer').innerHTML = `
+                <div class="welcome-state" id="welcomeState">
+                    <h2>Welcome to SoulShield</h2>
+                    <p>I'm here to listen and support you. Feel free to share whatever is on your mind.</p>
+                    <div class="quick-actions">
+                        <button class="quick-action" onclick="sendQuickMessage('I need someone to talk to')">I need someone to talk to</button>
+                        <button class="quick-action" onclick="sendQuickMessage('I feel stressed lately')">I feel stressed lately</button>
+                        <button class="quick-action" onclick="sendQuickMessage('Help me calm down')">Help me calm down</button>
+                    </div>
+                </div>
+            `;
+            document.getElementById('messageCount').textContent = '0';
+        }
+
+        function newSession() {
+            state.sessionId = generateSessionId();
+            state.messages = [];
+            document.getElementById('sessionIdDisplay').textContent = state.sessionId.substr(0, 8) + '...';
+            document.getElementById('messageCount').textContent = '0';
+            document.getElementById('messagesContainer').innerHTML = `
+                <div class="welcome-state" id="welcomeState">
+                    <h2>New Session Started</h2>
+                    <p>I'm here to listen and support you. Feel free to share whatever is on your mind.</p>
+                    <div class="quick-actions">
+                        <button class="quick-action" onclick="sendQuickMessage('I need someone to talk to')">I need someone to talk to</button>
+                        <button class="quick-action" onclick="sendQuickMessage('I feel stressed lately')">I feel stressed lately</button>
+                        <button class="quick-action" onclick="sendQuickMessage('Help me calm down')">Help me calm down</button>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Chat
+        function sendQuickMessage(message) {
+            document.getElementById('chatInput').value = message;
+            sendMessage();
+        }
+
+        async function sendMessage() {
+            const input = document.getElementById('chatInput');
+            const message = input.value.trim();
+            if (!message) return;
+
+            // Hide welcome state
+            const welcome = document.getElementById('welcomeState');
+            if (welcome) welcome.remove();
+
+            // Add user message
+            addMessage('user', message);
+            input.value = '';
+            input.style.height = 'auto';
+
+            // Show typing indicator
+            const typingId = showTypingIndicator();
+
+            try {
+                const response = await fetch(API_URL + '/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'x-api-key': API_KEY
+                    },
+                    body: JSON.stringify({
+                        message,
+                        sessionId: state.sessionId,
+                        token: state.token
+                    })
+                });
+
+                removeTypingIndicator(typingId);
+
+                if (response.ok) {
+                    const data = await response.json();
+                    addMessage('assistant', data.response, data.options);
+                } else if (response.status === 401) {
+                    addMessage('assistant', 'Your session has expired. Please log in again.');
+                    setTimeout(logout, 2000);
+                } else {
+                    addMessage('assistant', 'I apologize, but I encountered an issue. Please try again.');
+                }
+            } catch (err) {
+                removeTypingIndicator(typingId);
+                addMessage('assistant', 'Connection error. Please check your internet and try again.');
+            }
+
+            document.getElementById('messageCount').textContent = state.messages.length;
+        }
+
+        function addMessage(role, content, options = []) {
+            const container = document.getElementById('messagesContainer');
+            const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+            state.messages.push({ role, content, time });
+
+            const messageHtml = `
+                <div class="message ${role}">
+                    <div class="message-avatar">${role === 'user' ? '👤' : '💚'}</div>
+                    <div class="message-content">
+                        <div class="message-bubble">${formatMessage(content)}</div>
+                        ${options.length ? `
+                            <div class="message-options">
+                                ${options.map(opt => `<button class="option-btn" onclick="sendQuickMessage('${opt.replace(/'/g, "\\'")}')">${opt}</button>`).join('')}
+                            </div>
+                        ` : ''}
+                        <div class="message-time">${time}</div>
+                    </div>
+                </div>
+            `;
+
+            container.insertAdjacentHTML('beforeend', messageHtml);
+            container.scrollTop = container.scrollHeight;
+        }
+
+        function formatMessage(text) {
+            return text
+                .replace(/\n\n/g, '</p><p>')
+                .replace(/\n/g, '<br>')
+                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+        }
+
+        function showTypingIndicator() {
+            const container = document.getElementById('messagesContainer');
+            const id = 'typing-' + Date.now();
+            container.insertAdjacentHTML('beforeend', `
+                <div class="message assistant" id="${id}">
+                    <div class="message-avatar">💚</div>
+                    <div class="message-content">
+                        <div class="message-bubble">
+                            <div class="typing-indicator">
+                                <span></span><span></span><span></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `);
+            container.scrollTop = container.scrollHeight;
+            return id;
+        }
+
+        function removeTypingIndicator(id) {
+            const el = document.getElementById(id);
+            if (el) el.remove();
+        }
+
+        // Summaries
+        async function loadSummaries() {
+            try {
+                const response = await fetch(`${API_URL}/summaries?token=${state.token}`, {
+                    headers: { 'x-api-key': API_KEY }
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    const list = document.getElementById('summariesList');
+                    
+                    if (data.summaries && data.summaries.length > 0) {
+                        list.innerHTML = data.summaries.slice(0, 3).map(s => {
+                            const date = new Date(s.created_at * 1000).toLocaleDateString();
+                            return `
+                                <div class="summary-item">
+                                    <div class="summary-date">${date}</div>
+                                    ${s.summary.substring(0, 100)}...
+                                </div>
+                            `;
+                        }).join('');
+                    }
+                }
+            } catch (err) {
+                console.error('Failed to load summaries:', err);
+            }
+        }
+
+        // Helpers
+        function handleKeyDown(e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendMessage();
+            }
+        }
+
+        function autoResizeTextarea() {
+            const textarea = document.getElementById('chatInput');
+            textarea.addEventListener('input', function() {
+                this.style.height = 'auto';
+                this.style.height = Math.min(this.scrollHeight, 150) + 'px';
+            });
+        }
+    </script>
+</body>
+</html>
+
