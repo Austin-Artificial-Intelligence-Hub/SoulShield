@@ -8,7 +8,7 @@ from decimal import Decimal
 from typing import List, Dict, Optional
 from uuid import uuid4
 import boto3
-from llm_provider import call_llm
+from llm_provider import call_llm, run_chat_pipeline
 
 dynamodb = boto3.resource('dynamodb')
 chat_table = dynamodb.Table(os.environ['CHAT_TABLE_NAME'])
@@ -130,33 +130,35 @@ def handle_chat(event):
     # Retrieve conversation history
     history = get_conversation_history(session_id)
     
-    # Build messages for LLM
-    messages = [
-        {'role': 'system', 'content': SYSTEM_PROMPT},
-        *history,
-        {'role': 'user', 'content': message}
-    ]
-    
-    # Call LLM
-    response = call_llm(messages)
+    # Run the chat pipeline (routing -> support_coach -> validation -> fallback)
+    pipeline_result = run_chat_pipeline(message, history)
+    response_text = pipeline_result.get('response_text', '')
+    options = pipeline_result.get('options', [])
     
     # Store user message and assistant response
     timestamp = int(time.time() * 1000)
     ttl = int(time.time()) + (DATA_RETENTION_DAYS * 24 * 60 * 60)
     
     store_message(session_id, timestamp, 'user', message, ttl, username)
-    store_message(session_id, timestamp + 1, 'assistant', response, ttl, username)
+    store_message(session_id, timestamp + 1, 'assistant', response_text, ttl, username)
     
     # Generate and store summary if conversation is getting long
     if len(history) >= 10:  # After 5 exchanges
         print(f"Generating summary for user {username}, session {session_id}")
+        messages = [
+            {'role': 'system', 'content': SYSTEM_PROMPT},
+            *history,
+            {'role': 'user', 'content': message}
+        ]
         summary = generate_conversation_summary(messages)
         store_summary(username, session_id, summary, ttl)
         print(f"Summary stored: {summary[:50]}...")
     
+    # Return only response_text and options (no internal fields)
     return success_response({
         'sessionId': session_id,
-        'response': response,
+        'response': response_text,
+        'options': options,
         'timestamp': timestamp
     })
 

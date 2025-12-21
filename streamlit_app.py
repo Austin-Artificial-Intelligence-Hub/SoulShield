@@ -215,6 +215,12 @@ if not st.session_state.user_token:
 for message in st.session_state.messages:
     with st.chat_message(message["role"]):
         st.markdown(message["content"])
+        # Display options as pills/buttons if available
+        if message.get("options"):
+            cols = st.columns(len(message["options"]))
+            for i, option in enumerate(message["options"]):
+                with cols[i]:
+                    st.button(option, key=f"opt_{message.get('timestamp', '')}_{i}", disabled=True)
         if "timestamp" in message:
             st.caption(message["timestamp"])
 
@@ -272,15 +278,21 @@ if prompt := st.chat_input("Type your message here..."):
             if response.status_code == 200:
                 data = response.json()
                 assistant_message = data.get('response', 'No response received')
+                options = data.get('options', [])
                 
                 # Update placeholder with actual response
                 message_placeholder.markdown(assistant_message)
                 st.caption(datetime.now().strftime("%H:%M:%S"))
                 
+                # Display options as clickable buttons if available
+                if options:
+                    st.session_state.pending_options = options
+                
                 # Add to session state
                 st.session_state.messages.append({
                     "role": "assistant",
                     "content": assistant_message,
+                    "options": options,
                     "timestamp": datetime.now().strftime("%H:%M:%S")
                 })
                 
