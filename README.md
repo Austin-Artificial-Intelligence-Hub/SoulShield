@@ -1,46 +1,111 @@
-# SoulShield - Privacy-Focused AI Chatbot with User Memory
+# SoulShield - Trauma-Informed AI Support Coach
 
-A secure, privacy-first conversational AI assistant built on AWS with user authentication and persistent memory through chat summaries. SoulShield protects your conversations while providing intelligent, personalized assistance.
+A secure, privacy-first mental health support assistant built on AWS with intelligent routing, trauma-informed responses, and comprehensive security features. SoulShield uses an agentic pipeline with LangSmith-managed prompts to provide personalized, contextual support.
 
 ## 🌟 Features
 
-- 🔐 **User Authentication**: Secure username/password accounts with PBKDF2 hashing
-- 💬 **Persistent Memory**: AI remembers conversations through intelligent summaries
-- 🔒 **Privacy-First**: End-to-end encryption, auto-deletion, minimal logging
-- ⚡ **Serverless**: Built on AWS Lambda, API Gateway, and DynamoDB
+### AI Agents (LangSmith-Managed)
+- 🧠 **Session Greeting Agent**: Personalized welcome messages for returning users based on past session summaries
+- 🎯 **Routing Agent**: Intelligent message classification (mode, privacy context, risk level)
+- 💚 **Support Coach**: Trauma-informed responses with mode-specific behavior (grounding, therapy prep, crisis resources)
+- 🛡️ **Safety Fallback Agent**: Secure fallback responses when other agents fail
+
+### Security & Privacy
+- 🔐 **Client-Side Encryption**: AES-256-GCM encryption with PBKDF2 key derivation
+- 🛡️ **XSS Protection**: Content Security Policy, Trusted Types, HTML sanitization
+- 🔒 **Password Hashing**: PBKDF2-HMAC-SHA256 with 100,000 iterations
+- 📦 **AWS Encryption**: DynamoDB encryption at rest (AWS-managed)
+- 🗑️ **Auto-Deletion**: Data automatically deleted after 30 days
+
+### Infrastructure
+- ⚡ **Serverless**: AWS Lambda, API Gateway, DynamoDB
 - 🤖 **Multiple LLM Support**: AWS Bedrock (Claude) or OpenAI
 - 📊 **Chat Summaries**: Automatic conversation summaries for long chats
-- 🌐 **Web Interface**: Beautiful Streamlit-based chat interface
+- 🌐 **Dual UI**: Beautiful Web interface + Streamlit alternative
 
 ## 🏗️ Architecture
 
 ```
-┌─────────────────┐    ┌──────────────┐    ┌─────────────────┐
-│   Streamlit     │───▶│ API Gateway  │───▶│ Lambda Function │
-│   Frontend      │    │   + API Key  │    │   (Python)      │
-└─────────────────┘    └──────────────┘    └─────────────────┘
-                                                     │
-                              ┌──────────────────────┼──────────────────────┐
-                              │                      │                      │
-                              ▼                      ▼                      ▼
-                    ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
-                    │   DynamoDB      │    │   DynamoDB      │    │   AWS Bedrock   │
-                    │  Chat History   │    │ Users & Summary │    │   (Claude AI)   │
-                    │   (Encrypted)   │    │   (Encrypted)   │    │                 │
-                    └─────────────────┘    └─────────────────┘    └─────────────────┘
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                              WEB UI (Secure)                                │
+│  ┌──────────────┐  ┌───────────────┐  ┌─────────────┐  ┌─────────────────┐ │
+│  │  encryption  │  │   sanitize    │  │  dom-utils  │  │    app.js       │ │
+│  │    (AES)     │  │    (XSS)      │  │(TrustedType)│  │  (main logic)   │ │
+│  └──────────────┘  └───────────────┘  └─────────────┘  └─────────────────┘ │
+│                              Content Security Policy                        │
+└──────────────────────────────────┬──────────────────────────────────────────┘
+                                   │ HTTPS
+                                   ▼
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                            API Gateway + API Key                             │
+└──────────────────────────────────┬───────────────────────────────────────────┘
+                                   │
+                                   ▼
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                         Lambda Function (Python)                             │
+│                                                                              │
+│  ┌────────────────────────────────────────────────────────────────────────┐ │
+│  │                        AGENTIC PIPELINE                                 │ │
+│  │                                                                         │ │
+│  │  ┌──────────────┐    ┌──────────────┐    ┌──────────────┐             │ │
+│  │  │   Session    │    │   Routing    │    │   Support    │             │ │
+│  │  │   Greeting   │───▶│    Agent     │───▶│    Coach     │             │ │
+│  │  │   Agent      │    │              │    │              │             │ │
+│  │  └──────────────┘    └──────────────┘    └──────────────┘             │ │
+│  │         │                   │                    │                     │ │
+│  │         │                   │                    │                     │ │
+│  │         │                   ▼                    ▼                     │ │
+│  │         │            ┌──────────────┐    ┌──────────────┐             │ │
+│  │         │            │   LangSmith  │    │    Safety    │             │ │
+│  │         │            │   Prompts    │    │   Fallback   │             │ │
+│  │         │            └──────────────┘    └──────────────┘             │ │
+│  └─────────┼───────────────────────────────────────────────────────────────┘ │
+│            │                                                                  │
+└────────────┼──────────────────────────────────────────────────────────────────┘
+             │
+   ┌─────────┼─────────────────────────────────────────────┐
+   │         │                                             │
+   ▼         ▼                                             ▼
+┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
+│   DynamoDB      │    │   DynamoDB      │    │  OpenAI / AWS   │
+│  Chat History   │    │ Users & Summary │    │    Bedrock      │
+│   (Encrypted)   │    │   (Encrypted)   │    │   (Claude AI)   │
+└─────────────────┘    └─────────────────┘    └─────────────────┘
 ```
+
+### Agentic Pipeline Flow
+
+1. **Session Greeting** (for returning users): Generates personalized welcome based on past session summaries
+2. **Routing Agent**: Classifies message → `{mode, privacy_context, risk_level}`
+3. **Support Coach**: Generates trauma-informed response based on routing
+4. **Safety Fallback**: Provides safe response if other agents fail
 
 ## 🔒 Privacy & Security Features
 
-- **Encryption at Rest**: All DynamoDB tables use AWS-managed AES-256 encryption
+### Client-Side Security (Web UI)
+- **AES-256-GCM Encryption**: Messages encrypted before leaving the browser
+- **PBKDF2 Key Derivation**: 100,000 iterations for password-derived keys
+- **Content Security Policy**: No inline scripts, strict source restrictions
+- **Trusted Types**: DOM-level XSS protection for modern browsers
+- **HTML Sanitization**: All user content sanitized before rendering
+- **Subresource Integrity**: External scripts verified with SRI hashes
+
+### Server-Side Security (AWS)
+- **Encryption at Rest**: DynamoDB with AWS-managed AES-256 encryption
 - **Encryption in Transit**: TLS 1.2+ for all API communications
-- **Secure Password Storage**: PBKDF2 hashing with salt (100,000 iterations)
+- **Secure Password Storage**: PBKDF2-HMAC-SHA256 with salt (100,000 iterations)
 - **Data Minimization**: Only stores essential conversation data
 - **Auto-Deletion**: All data automatically deleted after 30 days (configurable)
 - **No Content Logging**: Chat messages never appear in CloudWatch logs
 - **User Isolation**: Complete separation between user accounts
 - **API Key Authentication**: Rate-limited API access
 - **Session Tokens**: 24-hour expiring authentication tokens
+
+### Bystander Safety (Trauma-Informed)
+- **Privacy Context Detection**: Routing agent detects if user may be monitored
+- **Bystander-Safe Language**: Neutral, everyday wellness wording when privacy unknown
+- **No Escalation**: Never takes actions on user's behalf
+- **User Autonomy**: Offers choices, not instructions
 
 ## 🚀 Quick Start
 
@@ -104,6 +169,15 @@ cdk deploy
 
 ### 5. Run the Web Interface
 
+**Option A: Secure Web UI (Recommended)**
+```bash
+# Navigate to web directory and start server
+cd web
+python3 -m http.server 8080
+```
+Open http://localhost:8080 in your browser
+
+**Option B: Streamlit UI**
 ```bash
 # Install Streamlit dependencies
 pip install -r streamlit_requirements.txt
@@ -111,13 +185,16 @@ pip install -r streamlit_requirements.txt
 # Launch the chat interface
 streamlit run streamlit_app.py
 ```
+Open http://localhost:8501 in your browser
 
 ### 6. Use Your Chatbot
 
-1. Open http://localhost:8501 in your browser
-2. Enter your API URL and API Key (from CDK deployment output)
-3. Register a new account or login
-4. Start chatting with your AI assistant!
+1. Register a new account or login
+2. Start chatting with your AI support coach!
+3. The system will:
+   - Route your message through the agentic pipeline
+   - Detect your emotional state and privacy context
+   - Respond with appropriate trauma-informed support
 
 ## 📖 Usage
 
@@ -149,19 +226,30 @@ streamlit run streamlit_app.py
 ```
 ├── app.py                      # CDK app entry point
 ├── stacks/
-│   └── chatbot_stack.py       # Infrastructure definition
+│   └── chatbot_stack.py       # AWS infrastructure definition
 ├── lambda/
 │   ├── chat/
-│   │   ├── index.py           # Main Lambda handler
-│   │   ├── llm_provider.py    # LLM integration
+│   │   ├── index.py           # Main Lambda handler (agentic pipeline)
+│   │   ├── llm_provider.py    # LLM integration & agent functions
 │   │   └── requirements.txt   # Lambda dependencies
 │   └── layer/                 # Shared Lambda layer
+├── web/                        # Secure Web UI
+│   ├── index.html             # Main HTML (with CSP)
+│   └── js/
+│       ├── app.js             # Main application logic
+│       ├── config.js          # API configuration
+│       ├── encryption.js      # Client-side AES-256 encryption
+│       ├── sanitize.js        # HTML sanitization (XSS protection)
+│       └── dom-utils.js       # Safe DOM manipulation (Trusted Types)
 ├── scripts/
 │   ├── setup_layer.sh         # Build Lambda layer
-│   └── test_api.py           # API testing script
-├── streamlit_app.py           # Web interface
+│   ├── test_api.py            # API testing script
+│   ├── single_turn_bystander.jsonl   # Evaluation dataset
+│   └── multiturn_scenarios.json      # Multi-turn test scenarios
+├── streamlit_app.py           # Alternative Streamlit UI
+├── telegram_bot/              # Telegram bot integration
 ├── requirements.txt           # CDK dependencies
-└── streamlit_requirements.txt # UI dependencies
+└── streamlit_requirements.txt # Streamlit UI dependencies
 ```
 
 ### API Endpoints

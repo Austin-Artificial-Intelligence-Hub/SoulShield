@@ -113,7 +113,13 @@ def handle_login(event):
 
 
 def handle_chat(event):
-    """Handle chat requests"""
+    """
+    Handle chat requests using the full agentic pipeline:
+    1. generate_session_greeting (for returning users on new sessions)
+    2. routing_agent_prompt (classify message → mode, privacy, risk)
+    3. support_coach (generate response based on routing)
+    4. safety_fallback (if coach fails)
+    """
     body = json.loads(event.get('body', '{}'))
     message = body.get('message')
     session_id = body.get('sessionId', str(uuid4()))
@@ -144,21 +150,26 @@ def handle_chat(event):
             f"- {s['summary']}" for s in past_summaries
         ])
     
-    # Generate personalized greeting for returning users on new session
+    # Step 1: Generate personalized greeting for returning users on new session
     greeting = ""
     if is_new_session and past_summaries:
+        print("Step 1: Generating session greeting for returning user...")
         greeting = generate_session_greeting(past_summaries)
-        print(f"Generated greeting for returning user: {greeting[:50]}...")
+        print(f"Generated greeting: {greeting[:50]}...")
     
-    # If we have a greeting for a returning user, just use that (no double response)
+    # If we have a greeting for a returning user, use that (skip full pipeline)
     if greeting:
         response_text = greeting
         options = ["Share how I'm feeling", "Just checking in"]
+        routing_info = {'mode': 'normal_support', 'privacy_context': 'unknown', 'risk_level': 'low'}
     else:
-        # Run the chat pipeline with summary context
+        # Steps 2-4: Run the full agentic pipeline
+        # routing_agent → support_coach → safety_fallback
+        print("Running full agentic pipeline...")
         pipeline_result = run_chat_pipeline(message, history, summary_context)
         response_text = pipeline_result.get('response_text', '')
         options = pipeline_result.get('options', [])
+        routing_info = pipeline_result.get('routing', {})
     
     # Store user message and assistant response
     timestamp = int(time.time() * 1000)
@@ -179,7 +190,7 @@ def handle_chat(event):
         store_summary(username, session_id, summary, ttl)
         print(f"Summary stored: {summary[:50]}...")
     
-    # Return only response_text and options (no internal fields)
+    # Return response (internal routing info not exposed to client)
     return success_response({
         'sessionId': session_id,
         'response': response_text,
