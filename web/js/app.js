@@ -19,8 +19,14 @@
         sessionId: generateSessionId(),
         messages: [],
         isRegisterMode: false,
-        currentPage: 'chat'
+        currentPage: 'chat',
+        voiceEnabled: false,
+        isRecording: false
     };
+
+    // Voice recognition instance
+    let recognition = null;
+    let synthesis = window.speechSynthesis;
 
     // Initialize on DOM ready
     document.addEventListener('DOMContentLoaded', init);
@@ -87,8 +93,149 @@
             link.addEventListener('click', handleNavigation);
         });
 
+        // Back buttons on pages
+        document.querySelectorAll('.btn-back').forEach(btn => {
+            btn.addEventListener('click', function() {
+                showPage('chat');
+            });
+        });
+
+        // Voice controls
+        setupVoiceControls();
+
         // Quick action buttons
         setupQuickActionListeners();
+    }
+
+    // Voice functionality
+    function setupVoiceControls() {
+        // Initialize speech recognition if available
+        if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            recognition = new SpeechRecognition();
+            recognition.continuous = false;
+            recognition.interimResults = true;
+            recognition.lang = 'en-US';
+
+            recognition.onstart = function() {
+                state.isRecording = true;
+                updateVoiceUI();
+            };
+
+            recognition.onresult = function(event) {
+                let transcript = '';
+                for (let i = event.resultIndex; i < event.results.length; i++) {
+                    transcript += event.results[i][0].transcript;
+                }
+                const chatInput = document.getElementById('chatInput');
+                if (chatInput) {
+                    chatInput.value = transcript;
+                }
+            };
+
+            recognition.onend = function() {
+                state.isRecording = false;
+                updateVoiceUI();
+            };
+
+            recognition.onerror = function(event) {
+                console.error('Speech recognition error:', event.error);
+                state.isRecording = false;
+                updateVoiceUI();
+            };
+        }
+
+        // Voice input button (main)
+        const voiceInputBtn = document.getElementById('voiceInputBtn');
+        if (voiceInputBtn) {
+            voiceInputBtn.addEventListener('click', toggleVoiceInput);
+        }
+
+        // Mic button (inline)
+        const micBtn = document.getElementById('micBtn');
+        if (micBtn) {
+            micBtn.addEventListener('click', toggleVoiceInput);
+        }
+
+        // Voice mode toggle
+        const voiceModeToggle = document.getElementById('voiceModeToggle');
+        if (voiceModeToggle) {
+            voiceModeToggle.addEventListener('click', toggleVoiceMode);
+        }
+    }
+
+    function toggleVoiceInput() {
+        if (!recognition) {
+            alert('Voice input is not supported in your browser. Please try Chrome or Edge.');
+            return;
+        }
+
+        if (state.isRecording) {
+            recognition.stop();
+        } else {
+            recognition.start();
+        }
+    }
+
+    function toggleVoiceMode() {
+        state.voiceEnabled = !state.voiceEnabled;
+        updateVoiceUI();
+    }
+
+    function updateVoiceUI() {
+        const voiceInputBtn = document.getElementById('voiceInputBtn');
+        const micBtn = document.getElementById('micBtn');
+        const voiceModeToggle = document.getElementById('voiceModeToggle');
+        const voiceStatus = document.getElementById('voiceStatus');
+
+        // Update recording buttons
+        if (voiceInputBtn) {
+            voiceInputBtn.classList.toggle('recording', state.isRecording);
+            const label = voiceInputBtn.querySelector('.voice-label');
+            if (label) label.textContent = state.isRecording ? 'Listening...' : 'Tap to speak';
+        }
+
+        if (micBtn) {
+            micBtn.classList.toggle('recording', state.isRecording);
+        }
+
+        // Update voice mode toggle
+        if (voiceModeToggle) {
+            voiceModeToggle.classList.toggle('active', state.voiceEnabled);
+            const label = voiceModeToggle.querySelector('.voice-label');
+            if (label) label.textContent = state.voiceEnabled ? 'Voice replies: On' : 'Voice replies: Off';
+        }
+
+        // Update status indicator
+        if (voiceStatus) {
+            voiceStatus.style.display = state.isRecording ? 'flex' : 'none';
+        }
+    }
+
+    function speakText(text) {
+        if (!state.voiceEnabled || !synthesis) return;
+
+        // Cancel any ongoing speech
+        synthesis.cancel();
+
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.rate = 0.9;
+        utterance.pitch = 1;
+        utterance.volume = 1;
+
+        // Try to use a natural voice
+        const voices = synthesis.getVoices();
+        const preferredVoice = voices.find(v => 
+            v.name.includes('Samantha') || 
+            v.name.includes('Google') || 
+            v.name.includes('Natural') ||
+            v.lang.startsWith('en')
+        );
+        if (preferredVoice) {
+            utterance.voice = preferredVoice;
+        }
+
+        synthesis.speak(utterance);
     }
 
     function generateSessionId() {
@@ -424,6 +571,11 @@
 
         container.insertAdjacentHTML('beforeend', messageHTML);
         container.scrollTop = container.scrollHeight;
+
+        // Speak assistant messages if voice mode is enabled
+        if (role === 'assistant' && state.voiceEnabled) {
+            speakText(content);
+        }
 
         // Add click handlers for option buttons
         container.querySelectorAll('.option-btn:not([data-bound])').forEach(btn => {

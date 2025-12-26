@@ -792,6 +792,131 @@
             opacity: 0.9;
         }
 
+        /* Voice Controls */
+        .voice-controls {
+            display: flex;
+            gap: 0.75rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .btn-voice, .btn-voice-toggle {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--lavender);
+            border: 2px solid var(--lavender-dark);
+            padding: 0.625rem 1rem;
+            border-radius: 25px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--text);
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+
+        .btn-voice:hover, .btn-voice-toggle:hover {
+            background: var(--sage-light);
+            border-color: var(--sage);
+        }
+
+        .btn-voice.recording {
+            background: #FEE2E2;
+            border-color: #EF4444;
+            animation: pulse 1.5s infinite;
+        }
+
+        .btn-voice-toggle.active {
+            background: var(--sage-light);
+            border-color: var(--sage);
+        }
+
+        .btn-voice svg, .btn-voice-toggle svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        .voice-label {
+            font-size: 0.85rem;
+        }
+
+        .btn-voice-input {
+            background: var(--lavender);
+            border: 2px solid var(--lavender-dark);
+            width: 48px;
+            height: 48px;
+            border-radius: 14px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            flex-shrink: 0;
+        }
+
+        .btn-voice-input:hover {
+            background: var(--sage-light);
+            border-color: var(--sage);
+        }
+
+        .btn-voice-input.recording {
+            background: #FEE2E2;
+            border-color: #EF4444;
+            animation: pulse 1.5s infinite;
+        }
+
+        .btn-voice-input svg {
+            width: 20px;
+            height: 20px;
+            color: var(--text);
+        }
+
+        .voice-status {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            background: var(--lavender);
+            border-radius: 12px;
+            margin-bottom: 0.75rem;
+        }
+
+        .voice-wave {
+            display: flex;
+            gap: 3px;
+            align-items: center;
+            height: 24px;
+        }
+
+        .voice-wave span {
+            width: 3px;
+            background: var(--sage);
+            border-radius: 2px;
+            animation: wave 1s ease-in-out infinite;
+        }
+
+        .voice-wave span:nth-child(1) { height: 8px; animation-delay: 0s; }
+        .voice-wave span:nth-child(2) { height: 16px; animation-delay: 0.1s; }
+        .voice-wave span:nth-child(3) { height: 24px; animation-delay: 0.2s; }
+        .voice-wave span:nth-child(4) { height: 16px; animation-delay: 0.3s; }
+        .voice-wave span:nth-child(5) { height: 8px; animation-delay: 0.4s; }
+
+        @keyframes wave {
+            0%, 100% { transform: scaleY(0.5); }
+            50% { transform: scaleY(1); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        .voice-status-text {
+            font-size: 0.85rem;
+            color: var(--text);
+            font-weight: 500;
+        }
+
         /* Responsive */
         @media (max-width: 768px) {
             .sidebar {
@@ -888,6 +1013,26 @@
             </div>
 
             <div class="chat-input-container">
+                <div class="voice-controls" id="voiceControls">
+                    <button class="btn-voice" id="voiceInputBtn" title="Speak your message">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"/>
+                        </svg>
+                        <span class="voice-label">Tap to speak</span>
+                    </button>
+                    <button class="btn-voice-toggle" id="voiceModeToggle" title="Toggle voice responses">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"/>
+                        </svg>
+                        <span class="voice-label">Voice replies: Off</span>
+                    </button>
+                </div>
+                <div class="voice-status" id="voiceStatus" style="display: none;">
+                    <div class="voice-wave">
+                        <span></span><span></span><span></span><span></span><span></span>
+                    </div>
+                    <span class="voice-status-text">Listening...</span>
+                </div>
                 <div class="chat-input-wrapper">
                     <textarea 
                         class="chat-input" 
@@ -895,6 +1040,11 @@
                         placeholder="Share what's on your mind..."
                         rows="1"
                     ></textarea>
+                    <button class="btn-voice-input" id="micBtn" title="Voice input">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"/>
+                        </svg>
+                    </button>
                     <button class="btn-send" id="sendBtn">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/>
@@ -908,7 +1058,7 @@
     <!-- About Page -->
     <div class="page-modal" id="aboutPage">
         <div class="page-content">
-            <button class="btn-back" onclick="SoulShieldApp.showPage('chat')">← Back to Chat</button>
+            <button class="btn-back" data-page="chat">← Back to Chat</button>
             <h1>About SoulShield</h1>
             
             <p>SoulShield is a trauma-informed companion designed to help you feel less alone during difficult moments. We're here between your therapy sessions, late at night, or whenever you need a calm presence.</p>
@@ -939,7 +1089,7 @@
     <!-- How It Works Page -->
     <div class="page-modal" id="howItWorksPage">
         <div class="page-content">
-            <button class="btn-back" onclick="SoulShieldApp.showPage('chat')">← Back to Chat</button>
+            <button class="btn-back" data-page="chat">← Back to Chat</button>
             <h1>How It Works</h1>
             
             <p>Using SoulShield is simple. Just type what's on your mind, and I'll be here to listen and support you.</p>
@@ -964,7 +1114,7 @@
     <!-- Privacy Page -->
     <div class="page-modal" id="privacyPage">
         <div class="page-content">
-            <button class="btn-back" onclick="SoulShieldApp.showPage('chat')">← Back to Chat</button>
+            <button class="btn-back" data-page="chat">← Back to Chat</button>
             <h1>Privacy & Security</h1>
             
             <p>Your safety and privacy are our highest priorities. Here's how we protect you:</p>
