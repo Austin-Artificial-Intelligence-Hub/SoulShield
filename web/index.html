@@ -44,6 +44,37 @@
             --radius: 16px;
         }
 
+        /* Dark Mode */
+        [data-theme="dark"] {
+            --cream: #1A1A2E;
+            --cream-dark: #16162A;
+            --sage: #6B8E5A;
+            --sage-light: #4A6B3A;
+            --sage-dark: #8AAE7A;
+            --lavender: #2A2A4A;
+            --lavender-dark: #3A3A5A;
+            --warm-white: #1E1E36;
+            --peach: #2E2A3A;
+            --text: #E8E8F0;
+            --text-light: #B8B8C8;
+            --text-muted: #8888A0;
+            --border: #3A3A5A;
+            --shadow: rgba(0, 0, 0, 0.3);
+        }
+
+        [data-theme="dark"] .message.user .message-bubble {
+            background: var(--sage);
+        }
+
+        [data-theme="dark"] .stat-card {
+            background: linear-gradient(135deg, var(--sage-dark) 0%, var(--sage) 100%);
+        }
+
+        [data-theme="dark"] .arch-node.router,
+        [data-theme="dark"] .arch-node.coach {
+            color: var(--cream);
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -138,6 +169,24 @@
             color: var(--sage);
         }
 
+        .btn-theme {
+            background: transparent;
+            border: 1px solid var(--border);
+            padding: 0.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-light);
+            transition: all 0.2s;
+        }
+
+        .btn-theme:hover {
+            border-color: var(--sage);
+            color: var(--sage);
+        }
+
         /* Main Layout */
         .main-container {
             display: flex;
@@ -198,6 +247,26 @@
         .btn-new-session:hover {
             background: var(--sage-dark);
             transform: translateY(-1px);
+        }
+
+        .btn-resources {
+            width: 100%;
+            background: transparent;
+            color: var(--text-light);
+            border: 1px solid var(--border);
+            padding: 0.75rem 1rem;
+            border-radius: 10px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-top: 0.5rem;
+            font-family: inherit;
+        }
+
+        .btn-resources:hover {
+            border-color: var(--sage);
+            color: var(--sage);
         }
 
         /* Guidance Section - replaces Past Sessions */
@@ -741,6 +810,205 @@
             background: var(--sage-dark);
         }
 
+        /* Impact Statistics */
+        .impact-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, var(--sage-light) 0%, var(--sage) 100%);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            text-align: center;
+            color: white;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            line-height: 1;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            opacity: 0.95;
+        }
+
+        .stat-source {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-align: center;
+            margin-top: -1rem;
+            margin-bottom: 2rem;
+        }
+
+        /* Architecture Diagram */
+        .architecture-diagram {
+            background: var(--warm-white);
+            border: 2px solid var(--border);
+            border-radius: var(--radius);
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+
+        .arch-flow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .arch-node {
+            background: var(--lavender);
+            border: 2px solid var(--lavender-dark);
+            border-radius: 12px;
+            padding: 1rem 1.25rem;
+            text-align: center;
+            min-width: 120px;
+        }
+
+        .arch-node.user {
+            background: var(--peach);
+            border-color: var(--accent);
+        }
+
+        .arch-node.router {
+            background: var(--sage-light);
+            border-color: var(--sage);
+            color: white;
+        }
+
+        .arch-node.coach {
+            background: var(--sage);
+            border-color: var(--sage-dark);
+            color: white;
+        }
+
+        .arch-node.fallback {
+            background: var(--cream-dark);
+            border-color: var(--border);
+        }
+
+        .arch-node-title {
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .arch-node-desc {
+            font-size: 0.75rem;
+            opacity: 0.85;
+        }
+
+        .arch-arrow {
+            font-size: 1.5rem;
+            color: var(--sage);
+        }
+
+        /* Crisis Resources Modal */
+        .crisis-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            backdrop-filter: blur(4px);
+        }
+
+        .crisis-content {
+            background: var(--warm-white);
+            border-radius: 20px;
+            padding: 2rem;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .crisis-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--text-muted);
+            cursor: pointer;
+        }
+
+        .crisis-content h2 {
+            color: var(--text);
+            margin-bottom: 0.5rem;
+        }
+
+        .crisis-content > p {
+            color: var(--text-light);
+            margin-bottom: 1.5rem;
+        }
+
+        .crisis-resources {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .resource-card {
+            background: var(--cream);
+            border-radius: 12px;
+            padding: 1rem 1.25rem;
+            border-left: 4px solid var(--sage);
+        }
+
+        .resource-card h4 {
+            color: var(--text);
+            font-size: 0.95rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .resource-number {
+            color: var(--sage-dark);
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .resource-note {
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            margin: 0.25rem 0 0 0;
+        }
+
+        .crisis-footer {
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-top: 1.5rem;
+            font-style: italic;
+        }
+
+        @media (max-width: 768px) {
+            .impact-stats {
+                grid-template-columns: 1fr;
+            }
+            .arch-flow {
+                flex-direction: column;
+            }
+            .arch-arrow {
+                transform: rotate(90deg);
+            }
+        }
+
         /* Security Diagram */
         .security-diagram {
             background: var(--warm-white);
@@ -953,6 +1221,14 @@
             <a class="nav-link" data-page="howItWorks">How it Works</a>
             <a class="nav-link" data-page="privacy">Privacy</a>
         </nav>
+        <button class="btn-theme" id="themeToggle" title="Toggle dark mode">
+            <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="20" height="20">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/>
+            </svg>
+            <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="20" height="20" style="display:none;">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/>
+            </svg>
+        </button>
         <div class="user-info" id="userInfo" style="display: none;">
             <span class="user-name" id="userName"></span>
             <button class="btn-logout">Logout</button>
@@ -968,6 +1244,7 @@
                     <p>Messages: <span id="messageCount">0</span></p>
                 </div>
                 <button class="btn-new-session">+ New Session</button>
+                <button class="btn-resources" id="showResourcesBtn">◇ Safety Resources</button>
             </div>
 
             <div class="guidance-section">
@@ -1061,28 +1338,63 @@
             <button class="btn-back" data-page="chat">← Back to Chat</button>
             <h1>About SoulShield</h1>
             
-            <p>SoulShield is a trauma-informed companion designed to help you feel less alone during difficult moments. We're here between your therapy sessions, late at night, or whenever you need a calm presence.</p>
-            
-            <h2>What We Are</h2>
-            <p>A supportive friend who listens without judgment. We help you:</p>
+            <!-- Impact Statistics -->
+            <div class="impact-stats">
+                <div class="stat-card">
+                    <div class="stat-number">50M</div>
+                    <div class="stat-label">People trapped in modern slavery worldwide</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">71%</div>
+                    <div class="stat-label">Are women and girls</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">1 in 4</div>
+                    <div class="stat-label">Victims are children</div>
+                </div>
+            </div>
+            <p class="stat-source">Source: International Labour Organization, 2024</p>
+
+            <h2>The Problem</h2>
+            <p>Survivors of human trafficking often can't access traditional mental health support. They may be:</p>
             <ul>
-                <li>Process your feelings through gentle reflection</li>
-                <li>Practice grounding when you feel overwhelmed</li>
-                <li>Prepare for therapy conversations</li>
-                <li>Feel less alone in hard moments</li>
+                <li><strong>Monitored</strong> — Someone may be checking their phone or watching their screen</li>
+                <li><strong>Isolated</strong> — Cut off from friends, family, and professional help</li>
+                <li><strong>Afraid</strong> — Seeking help openly could put them in danger</li>
+                <li><strong>Alone at night</strong> — When trauma feels heaviest, no one is available</li>
+            </ul>
+            <p>Existing therapy apps fail these survivors because they use obvious clinical language that could be detected by an abuser.</p>
+
+            <h2>Our Solution</h2>
+            <p>SoulShield is a <strong>covert support companion</strong> designed specifically for survivors who can't speak freely. We offer:</p>
+            <ul>
+                <li><strong>Bystander-Safe Mode</strong> — When you indicate someone might be watching, our responses look like a generic wellness app</li>
+                <li><strong>Trauma-Informed AI</strong> — Responses are gentle, non-prescriptive, and respect your autonomy</li>
+                <li><strong>Grounding & Regulation</strong> — Breathing exercises and calming techniques when you're overwhelmed</li>
+                <li><strong>24/7 Availability</strong> — Support during the late-night hours when therapists aren't available</li>
+                <li><strong>Zero Data Sharing</strong> — Encrypted conversations that auto-delete after 30 days</li>
+            </ul>
+
+            <h2>Who We Help</h2>
+            <p>SoulShield supports:</p>
+            <ul>
+                <li>Survivors of human trafficking seeking covert emotional support</li>
+                <li>Domestic violence survivors in monitored environments</li>
+                <li>Anyone who needs a calm presence between therapy sessions</li>
+                <li>People experiencing isolation or emotional distress</li>
             </ul>
 
             <h2>What We Are Not</h2>
-            <p>SoulShield is <strong>not</strong> a replacement for professional mental health care. We do not:</p>
+            <p>SoulShield is <strong>not</strong> a replacement for professional care. We do not:</p>
             <ul>
                 <li>Diagnose or treat mental health conditions</li>
-                <li>Provide medical or legal advice</li>
-                <li>Replace human connection or therapy</li>
-                <li>Make decisions for you</li>
+                <li>Provide medical, legal, or escape planning advice</li>
+                <li>Replace human therapists or crisis services</li>
+                <li>Make decisions for you — you stay in control</li>
             </ul>
 
             <h2>Our Approach</h2>
-            <p>Every response is designed with trauma-informed principles. We believe you are the expert on your own life. We offer choices, not instructions. We listen, reflect, and stay present with you.</p>
+            <p>Every response follows trauma-informed principles: <strong>safety, choice, collaboration, trustworthiness, and empowerment</strong>. We believe you are the expert on your own life. We offer options, not instructions. We listen, reflect, and stay present with you.</p>
         </div>
     </div>
 
@@ -1092,22 +1404,64 @@
             <button class="btn-back" data-page="chat">← Back to Chat</button>
             <h1>How It Works</h1>
             
-            <p>Using SoulShield is simple. Just type what's on your mind, and I'll be here to listen and support you.</p>
+            <p>SoulShield uses a multi-agent AI system designed specifically for trauma-informed support.</p>
 
-            <h2>1. Share What You're Feeling</h2>
-            <p>Type whatever you're comfortable sharing. You can be as brief or detailed as you like. There's no right or wrong way to express yourself here.</p>
+            <!-- Architecture Diagram -->
+            <div class="architecture-diagram">
+                <h3 style="text-align: center; margin-bottom: 1.5rem; color: var(--text);">System Architecture</h3>
+                <div class="arch-flow">
+                    <div class="arch-node user">
+                        <div class="arch-node-title">You</div>
+                        <div class="arch-node-desc">Share your message</div>
+                    </div>
+                    <span class="arch-arrow">→</span>
+                    <div class="arch-node router">
+                        <div class="arch-node-title">Safety Router</div>
+                        <div class="arch-node-desc">Detects privacy level & distress</div>
+                    </div>
+                    <span class="arch-arrow">→</span>
+                    <div class="arch-node coach">
+                        <div class="arch-node-title">Support Coach</div>
+                        <div class="arch-node-desc">Trauma-informed responses</div>
+                    </div>
+                    <span class="arch-arrow">→</span>
+                    <div class="arch-node fallback">
+                        <div class="arch-node-title">Safety Fallback</div>
+                        <div class="arch-node-desc">Backup if needed</div>
+                    </div>
+                </div>
+            </div>
 
-            <h2>2. I Listen and Respond</h2>
-            <p>I'll reflect what I hear, validate your feelings, and offer gentle options — like grounding exercises or questions to help you process.</p>
+            <h2>1. Intelligent Safety Detection</h2>
+            <p>When you send a message, our <strong>Safety Router</strong> analyzes it for:</p>
+            <ul>
+                <li><strong>Privacy context</strong> — Are you alone or might someone be watching?</li>
+                <li><strong>Distress level</strong> — Do you need grounding or gentle support?</li>
+                <li><strong>Risk signals</strong> — Should we prioritize safety resources?</li>
+            </ul>
 
-            <h2>3. You Stay in Control</h2>
-            <p>You decide what we talk about, how deep we go, and when we stop. I never push or pressure. This is your space.</p>
+            <h2>2. Bystander-Safe Responses</h2>
+            <p>If you indicate someone might be checking your phone (e.g., "He reads my messages"), SoulShield automatically:</p>
+            <ul>
+                <li>Uses neutral, everyday language that won't raise suspicion</li>
+                <li>Avoids words like "abuse," "escape," or "police"</li>
+                <li>Looks like a generic wellness app to anyone watching</li>
+            </ul>
 
-            <h2>4. Grounding When You Need It</h2>
-            <p>If you're feeling overwhelmed, I can guide you through simple breathing or sensory exercises to help you feel more present and calm.</p>
+            <h2>3. Trauma-Informed Support</h2>
+            <p>Our <strong>Support Coach</strong> follows trauma-informed principles:</p>
+            <ul>
+                <li>Offers choices, never commands</li>
+                <li>Uses your own words when reflecting</li>
+                <li>Respects your pace and boundaries</li>
+                <li>Guides grounding exercises when you're overwhelmed</li>
+            </ul>
 
-            <h2>5. Your Privacy Is Protected</h2>
-            <p>Everything you share is encrypted and automatically deleted after 30 days. No one reads your conversations — not even us.</p>
+            <h2>4. Voice Support</h2>
+            <p>Can't type? Use voice input to speak your message. Enable voice replies to hear responses read aloud — helpful when reading is difficult.</p>
+
+            <h2>5. Privacy by Design</h2>
+            <p>Your data is encrypted, auto-deleted after 30 days, and never shared. We can't read your conversations.</p>
         </div>
     </div>
 
@@ -1189,6 +1543,40 @@
                 <span id="authToggleText">Don't have an account?</span>
                 <a id="authToggleLink">Create one</a>
             </div>
+        </div>
+    </div>
+
+    <!-- Crisis Resources Modal -->
+    <div class="crisis-modal" id="crisisModal" style="display: none;">
+        <div class="crisis-content">
+            <button class="crisis-close" id="closeCrisis">×</button>
+            <h2>Safety Resources</h2>
+            <p>If you or someone you know needs help, these resources are available 24/7:</p>
+            
+            <div class="crisis-resources">
+                <div class="resource-card">
+                    <h4>National Human Trafficking Hotline</h4>
+                    <p class="resource-number">1-888-373-7888</p>
+                    <p class="resource-note">Text "HELP" to 233733</p>
+                </div>
+                <div class="resource-card">
+                    <h4>National Domestic Violence Hotline</h4>
+                    <p class="resource-number">1-800-799-7233</p>
+                    <p class="resource-note">Text "START" to 88788</p>
+                </div>
+                <div class="resource-card">
+                    <h4>Crisis Text Line</h4>
+                    <p class="resource-number">Text HOME to 741741</p>
+                    <p class="resource-note">Free, 24/7 support</p>
+                </div>
+                <div class="resource-card">
+                    <h4>988 Suicide & Crisis Lifeline</h4>
+                    <p class="resource-number">Call or text 988</p>
+                    <p class="resource-note">Available 24/7</p>
+                </div>
+            </div>
+            
+            <p class="crisis-footer">You deserve support. Reaching out takes courage.</p>
         </div>
     </div>
 

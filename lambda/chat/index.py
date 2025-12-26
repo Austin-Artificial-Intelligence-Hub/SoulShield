@@ -161,12 +161,13 @@ def handle_chat(event):
         store_summary(username, session_id, summary, ttl)
         print(f"Summary stored: {summary[:50]}...")
     
-    # Return response (internal routing info not exposed to client)
+    # Return response (include risk_level for client-side safety resources)
     return success_response({
         'sessionId': session_id,
         'response': response_text,
         'options': options,
-        'timestamp': timestamp
+        'timestamp': timestamp,
+        'risk_level': routing_info.get('risk_level', 'low')
     })
 
 

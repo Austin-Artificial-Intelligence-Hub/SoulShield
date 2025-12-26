@@ -100,6 +100,31 @@
             });
         });
 
+        // Theme toggle
+        const themeToggle = document.getElementById('themeToggle');
+        if (themeToggle) {
+            themeToggle.addEventListener('click', toggleTheme);
+        }
+
+        // Initialize theme from localStorage
+        initTheme();
+
+        // Crisis resources modal
+        const showResourcesBtn = document.getElementById('showResourcesBtn');
+        if (showResourcesBtn) {
+            showResourcesBtn.addEventListener('click', showCrisisModal);
+        }
+        const closeCrisis = document.getElementById('closeCrisis');
+        if (closeCrisis) {
+            closeCrisis.addEventListener('click', hideCrisisModal);
+        }
+        const crisisModal = document.getElementById('crisisModal');
+        if (crisisModal) {
+            crisisModal.addEventListener('click', function(e) {
+                if (e.target === crisisModal) hideCrisisModal();
+            });
+        }
+
         // Voice controls
         setupVoiceControls();
 
@@ -209,6 +234,54 @@
         // Update status indicator
         if (voiceStatus) {
             voiceStatus.style.display = state.isRecording ? 'flex' : 'none';
+        }
+    }
+
+    // Theme/Dark Mode
+    function initTheme() {
+        const savedTheme = localStorage.getItem('soulshield_theme') || 'light';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        updateThemeIcon(savedTheme);
+    }
+
+    function toggleTheme() {
+        const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+        const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+        document.documentElement.setAttribute('data-theme', newTheme);
+        localStorage.setItem('soulshield_theme', newTheme);
+        updateThemeIcon(newTheme);
+    }
+
+    function updateThemeIcon(theme) {
+        const sunIcon = document.querySelector('.icon-sun');
+        const moonIcon = document.querySelector('.icon-moon');
+        if (sunIcon && moonIcon) {
+            sunIcon.style.display = theme === 'light' ? 'block' : 'none';
+            moonIcon.style.display = theme === 'dark' ? 'block' : 'none';
+        }
+    }
+
+    // Crisis Resources Modal
+    function showCrisisModal() {
+        const modal = document.getElementById('crisisModal');
+        if (modal) modal.style.display = 'flex';
+    }
+
+    function hideCrisisModal() {
+        const modal = document.getElementById('crisisModal');
+        if (modal) modal.style.display = 'none';
+    }
+
+    // Auto-show crisis modal when high risk detected
+    function checkAndShowCrisisResources(riskLevel) {
+        if (riskLevel === 'high') {
+            // Subtle notification instead of auto-popup (respects user control)
+            const resourcesBtn = document.getElementById('showResourcesBtn');
+            if (resourcesBtn) {
+                resourcesBtn.style.borderColor = 'var(--sage)';
+                resourcesBtn.style.color = 'var(--sage)';
+                resourcesBtn.style.fontWeight = '600';
+            }
         }
     }
 
@@ -517,6 +590,10 @@
             if (response.ok) {
                 const data = await response.json();
                 addMessage('assistant', data.response, data.options);
+                // Check for high-risk detection
+                if (data.risk_level) {
+                    checkAndShowCrisisResources(data.risk_level);
+                }
             } else if (response.status === 401) {
                 addMessage('assistant', 'Your session has expired. Please log in again.');
                 setTimeout(logout, 2000);
