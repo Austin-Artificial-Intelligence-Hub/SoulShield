@@ -109,6 +109,16 @@
         // Initialize theme from localStorage
         initTheme();
 
+        // Mobile menu
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        if (mobileMenuBtn) {
+            mobileMenuBtn.addEventListener('click', openMobileSidebar);
+        }
+        const closeSidebarBtn = document.getElementById('closeSidebarBtn');
+        if (closeSidebarBtn) {
+            closeSidebarBtn.addEventListener('click', closeMobileSidebar);
+        }
+
         // Crisis resources modal
         const showResourcesBtn = document.getElementById('showResourcesBtn');
         if (showResourcesBtn) {
@@ -281,6 +291,28 @@
                 resourcesBtn.style.borderColor = 'var(--sage)';
                 resourcesBtn.style.color = 'var(--sage)';
                 resourcesBtn.style.fontWeight = '600';
+            }
+        }
+    }
+
+    // Mobile sidebar
+    function openMobileSidebar() {
+        const sidebar = document.getElementById('sidebar');
+        if (sidebar) {
+            sidebar.classList.add('mobile-open');
+            sidebar.style.display = 'flex';
+        }
+    }
+
+    function closeMobileSidebar() {
+        const sidebar = document.getElementById('sidebar');
+        if (sidebar) {
+            sidebar.classList.remove('mobile-open');
+            // Keep sidebar visible on desktop
+            if (window.innerWidth > 768) {
+                sidebar.style.display = 'flex';
+            } else {
+                sidebar.style.display = 'none';
             }
         }
     }
