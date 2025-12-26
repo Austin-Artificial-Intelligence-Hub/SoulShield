@@ -1,17 +1,17 @@
 /**
  * SoulShield Main Application
- * Secure chat interface with encryption and XSS protection
+ * Trauma-informed support companion with security features
  */
 (function() {
     'use strict';
 
-    // Configuration (loaded from config.js or defaults)
+    // Configuration
     const CONFIG = {
         get apiUrl() { return window.SOULSHIELD_CONFIG?.apiUrl || 'https://pypwr35xf3.execute-api.us-east-1.amazonaws.com/prod'; },
         get apiKey() { return window.SOULSHIELD_CONFIG?.apiKey || ''; }
     };
 
-    // Application state (kept in closure for security)
+    // Application state
     const state = {
         isLoggedIn: false,
         username: '',
@@ -19,20 +19,13 @@
         sessionId: generateSessionId(),
         messages: [],
         isRegisterMode: false,
-        _userPassword: null  // Stored only in memory, never persisted
+        currentPage: 'chat'
     };
-
-    // Encryption instance
-    let encryption = null;
 
     // Initialize on DOM ready
     document.addEventListener('DOMContentLoaded', init);
 
     function init() {
-        // Initialize encryption
-        encryption = new window.SoulShieldEncryption();
-
-        // Check for saved session
         const savedState = localStorage.getItem('soulshield_state');
         if (savedState) {
             try {
@@ -48,7 +41,6 @@
             }
         }
 
-        // Set up event listeners
         setupEventListeners();
         autoResizeTextarea();
     }
@@ -90,13 +82,13 @@
             authToggleLink.addEventListener('click', toggleAuthMode);
         }
 
-        // Quick action buttons
-        document.querySelectorAll('.quick-action').forEach(btn => {
-            btn.addEventListener('click', function() {
-                const message = this.getAttribute('data-message') || this.textContent;
-                sendQuickMessage(message);
-            });
+        // Navigation links
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', handleNavigation);
         });
+
+        // Quick action buttons
+        setupQuickActionListeners();
     }
 
     function generateSessionId() {
@@ -104,11 +96,39 @@
     }
 
     function saveState() {
-        // Only save non-sensitive data
         localStorage.setItem('soulshield_state', JSON.stringify({
             username: state.username,
             token: state.token
         }));
+    }
+
+    // Navigation
+    function handleNavigation(e) {
+        e.preventDefault();
+        const page = e.target.getAttribute('data-page');
+        if (page) {
+            showPage(page);
+        }
+    }
+
+    function showPage(page) {
+        state.currentPage = page;
+        const mainContent = document.getElementById('mainContent');
+        const chatContainer = document.querySelector('.chat-container');
+        const sidebar = document.getElementById('sidebar');
+        
+        // Hide modal pages
+        document.querySelectorAll('.page-modal').forEach(m => m.style.display = 'none');
+        
+        if (page === 'chat') {
+            if (chatContainer) chatContainer.style.display = 'flex';
+            if (sidebar && state.isLoggedIn) sidebar.style.display = 'flex';
+        } else {
+            if (chatContainer) chatContainer.style.display = 'none';
+            if (sidebar) sidebar.style.display = 'none';
+            const pageModal = document.getElementById(page + 'Page');
+            if (pageModal) pageModal.style.display = 'flex';
+        }
     }
 
     // Authentication
@@ -170,7 +190,6 @@
                     state.token = data.token;
                     state.username = username;
                     state.isLoggedIn = true;
-                    state._userPassword = password;  // Keep in memory for encryption
                     saveState();
                     onLoginSuccess();
                 }
@@ -215,13 +234,9 @@
         if (userInfo) userInfo.style.display = 'flex';
         if (userName) userName.textContent = state.username;
         if (sessionIdDisplay) sessionIdDisplay.textContent = state.sessionId.substr(0, 8) + '...';
-        
-        loadSummaries();
     }
 
     function logout() {
-        // Clear sensitive data
-        state._userPassword = null;
         state.isLoggedIn = false;
         state.username = '';
         state.token = '';
@@ -243,7 +258,7 @@
         if (messageCount) messageCount.textContent = '0';
         
         if (messagesContainer) {
-            window.SoulShieldDOM.setSafeHTML(messagesContainer, getWelcomeHTML());
+            messagesContainer.innerHTML = getWelcomeHTML();
             setupQuickActionListeners();
         }
     }
@@ -260,7 +275,7 @@
         if (messageCount) messageCount.textContent = '0';
         
         if (messagesContainer) {
-            window.SoulShieldDOM.setSafeHTML(messagesContainer, getNewSessionHTML());
+            messagesContainer.innerHTML = getNewSessionHTML();
             setupQuickActionListeners();
         }
     }
@@ -268,11 +283,12 @@
     function getWelcomeHTML() {
         return `
             <div class="welcome-state" id="welcomeState">
+                <div class="welcome-icon">🌿</div>
                 <h2>Welcome to SoulShield</h2>
-                <p>I'm here to listen and support you. Feel free to share whatever is on your mind.</p>
+                <p>I'm here to listen and support you. Take your time — there's no rush.</p>
                 <div class="quick-actions">
                     <button class="quick-action" data-message="I need someone to talk to">I need someone to talk to</button>
-                    <button class="quick-action" data-message="I feel stressed lately">I feel stressed lately</button>
+                    <button class="quick-action" data-message="I feel stressed lately">I'm feeling stressed</button>
                     <button class="quick-action" data-message="Help me calm down">Help me calm down</button>
                 </div>
             </div>
@@ -282,11 +298,12 @@
     function getNewSessionHTML() {
         return `
             <div class="welcome-state" id="welcomeState">
-                <h2>New Session Started</h2>
-                <p>I'm here to listen and support you. Feel free to share whatever is on your mind.</p>
+                <div class="welcome-icon">✨</div>
+                <h2>Fresh Start</h2>
+                <p>A new session, a new moment. I'm here whenever you're ready.</p>
                 <div class="quick-actions">
                     <button class="quick-action" data-message="I need someone to talk to">I need someone to talk to</button>
-                    <button class="quick-action" data-message="I feel stressed lately">I feel stressed lately</button>
+                    <button class="quick-action" data-message="I feel stressed lately">I'm feeling stressed</button>
                     <button class="quick-action" data-message="Help me calm down">Help me calm down</button>
                 </div>
             </div>
@@ -369,37 +386,53 @@
         const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
         state.messages.push({ role, content, time });
 
-        // Use safe DOM methods
-        const escapedContent = window.SoulShieldSanitize.formatMessage(content);
-        const optionsHTML = options.length ? `
-            <div class="message-options">
-                ${options.map(opt => `<button class="option-btn" data-option="${window.SoulShieldSanitize.escapeHTML(opt)}">${window.SoulShieldSanitize.escapeHTML(opt)}</button>`).join('')}
-            </div>
-        ` : '';
+        // Format content safely
+        const escapedContent = escapeHTML(content);
+        const formattedContent = escapedContent
+            .replace(/\n\n/g, '</p><p>')
+            .replace(/\n/g, '<br>');
+
+        // Create options HTML - styled as clickable buttons
+        let optionsHTML = '';
+        if (options && options.length > 0) {
+            optionsHTML = `
+                <div class="message-options">
+                    ${options.map(opt => `<button class="option-btn" data-option="${escapeHTML(opt)}">${escapeHTML(opt)}</button>`).join('')}
+                </div>
+            `;
+        }
+
+        // Single avatar per message
+        const avatar = role === 'user' ? '👤' : '💚';
 
         const messageHTML = `
             <div class="message ${role}">
-                <div class="message-avatar">${role === 'user' ? '👤' : '💚'}</div>
+                <div class="message-avatar">${avatar}</div>
                 <div class="message-content">
-                    <div class="message-bubble">${escapedContent}</div>
+                    <div class="message-bubble"><p>${formattedContent}</p></div>
                     ${optionsHTML}
-                    <div class="message-time">${window.SoulShieldSanitize.escapeHTML(time)}</div>
+                    <div class="message-time">${escapeHTML(time)}</div>
                 </div>
             </div>
         `;
 
-        window.SoulShieldDOM.insertSafeHTML(container, 'beforeend', messageHTML);
+        container.insertAdjacentHTML('beforeend', messageHTML);
         container.scrollTop = container.scrollHeight;
 
         // Add click handlers for option buttons
-        container.querySelectorAll('.option-btn').forEach(btn => {
-            if (!btn.hasAttribute('data-listener')) {
-                btn.setAttribute('data-listener', 'true');
-                btn.addEventListener('click', function() {
-                    sendQuickMessage(this.getAttribute('data-option'));
-                });
-            }
+        container.querySelectorAll('.option-btn:not([data-bound])').forEach(btn => {
+            btn.setAttribute('data-bound', 'true');
+            btn.addEventListener('click', function() {
+                sendQuickMessage(this.getAttribute('data-option'));
+            });
         });
+    }
+
+    function escapeHTML(text) {
+        if (!text) return '';
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
     }
 
     function showTypingIndicator() {
@@ -408,7 +441,7 @@
 
         const id = 'typing-' + Date.now();
         const html = `
-            <div class="message assistant" id="${id}">
+            <div class="message assistant typing-message" id="${id}">
                 <div class="message-avatar">💚</div>
                 <div class="message-content">
                     <div class="message-bubble">
@@ -420,7 +453,7 @@
             </div>
         `;
 
-        window.SoulShieldDOM.insertSafeHTML(container, 'beforeend', html);
+        container.insertAdjacentHTML('beforeend', html);
         container.scrollTop = container.scrollHeight;
         return id;
     }
@@ -429,37 +462,6 @@
         if (!id) return;
         const el = document.getElementById(id);
         if (el) el.remove();
-    }
-
-    // Summaries
-    async function loadSummaries() {
-        try {
-            const response = await fetch(`${CONFIG.apiUrl}/summaries?token=${state.token}`, {
-                headers: { 'x-api-key': CONFIG.apiKey }
-            });
-
-            if (response.ok) {
-                const data = await response.json();
-                const list = document.getElementById('summariesList');
-
-                if (data.summaries && data.summaries.length > 0 && list) {
-                    const summariesHTML = data.summaries.slice(0, 3).map(s => {
-                        const date = new Date(s.created_at * 1000).toLocaleDateString();
-                        const summaryText = window.SoulShieldSanitize.escapeHTML(s.summary.substring(0, 100));
-                        return `
-                            <div class="summary-item">
-                                <div class="summary-date">${window.SoulShieldSanitize.escapeHTML(date)}</div>
-                                ${summaryText}...
-                            </div>
-                        `;
-                    }).join('');
-
-                    window.SoulShieldDOM.setSafeHTML(list, summariesHTML);
-                }
-            }
-        } catch (err) {
-            console.error('Failed to load summaries:', err);
-        }
     }
 
     // Helpers
@@ -480,10 +482,9 @@
         }
     }
 
-    // Expose minimal API for debugging (remove in production)
+    // Expose minimal API
     window.SoulShieldApp = {
-        getState: () => ({ ...state, _userPassword: '[REDACTED]' }),
+        showPage: showPage,
         newSession: newSession
     };
 })();
-

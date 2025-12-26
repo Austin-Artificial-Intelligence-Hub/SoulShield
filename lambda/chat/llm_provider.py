@@ -232,7 +232,7 @@ def run_routing_agent(user_message: str, conversation_history: List[Dict]) -> Di
 
 
 def run_support_coach(user_message: str, conversation_history: List[Dict], 
-                       mode: str, privacy_context: str, summary_context: str = "") -> Dict:
+                       mode: str, privacy_context: str) -> Dict:
     """
     Step 2: Run the support coach with the routed mode.
     
@@ -241,18 +241,13 @@ def run_support_coach(user_message: str, conversation_history: List[Dict],
         conversation_history: Previous conversation messages
         mode: The routing mode (normal_support, grounding, therapy_prep, crisis_resources)
         privacy_context: Privacy context (unknown, private, bystander_possible)
-        summary_context: Optional past session summaries
     
     Returns:
         Dict with 'response_text' and 'options' keys
     """
     try:
-        # Build full context with summaries if available
-        context_parts = []
-        if summary_context:
-            context_parts.append(summary_context)
-        context_parts.append(json.dumps(conversation_history[-6:]))
-        full_context = "\n".join(context_parts) if context_parts else "[]"
+        # Include recent conversation history
+        history_context = json.dumps(conversation_history[-6:]) if conversation_history else "[]"
         
         # Include privacy context in mode description for the coach
         mode_with_privacy = f"{mode} (privacy_context: {privacy_context})"
@@ -262,7 +257,7 @@ def run_support_coach(user_message: str, conversation_history: List[Dict],
             user_message=user_message,
             variables={
                 'mode': mode_with_privacy,
-                'conversation_history': full_context
+                'conversation_history': history_context
             }
         )
         
@@ -317,10 +312,9 @@ def run_safety_fallback(user_message: str) -> Dict:
         }
 
 
-def run_chat_pipeline(user_message: str, conversation_history: List[Dict], 
-                       summary_context: str = "", skip_greeting: bool = False) -> Dict:
+def run_chat_pipeline(user_message: str, conversation_history: List[Dict]) -> Dict:
     """
-    Full agentic pipeline:
+    Agentic pipeline:
     1. routing_agent_prompt → Classify message (mode, privacy, risk)
     2. support_coach → Generate response based on routing
     3. safety_fallback → If coach fails, provide safe fallback
@@ -328,8 +322,6 @@ def run_chat_pipeline(user_message: str, conversation_history: List[Dict],
     Args:
         user_message: The current user message
         conversation_history: Previous conversation messages
-        summary_context: Optional summaries from past sessions for context
-        skip_greeting: If True, skip greeting behavior
     
     Returns:
         Dict with 'response_text', 'options', and 'routing' keys
@@ -342,18 +334,17 @@ def run_chat_pipeline(user_message: str, conversation_history: List[Dict],
     
     try:
         # Step 1: Run routing agent to classify the message
-        print(f"Running routing agent for: '{user_message[:50]}...'")
+        print(f"Routing: '{user_message[:50]}...'")
         routing = run_routing_agent(user_message, conversation_history)
         result['routing'] = routing
         
         # Step 2: Run support coach with routed mode
-        print(f"Running support coach with mode={routing['mode']}")
+        print(f"Coach: mode={routing['mode']}, privacy={routing['privacy_context']}")
         coach_result = run_support_coach(
             user_message=user_message,
             conversation_history=conversation_history,
             mode=routing['mode'],
-            privacy_context=routing['privacy_context'],
-            summary_context=summary_context
+            privacy_context=routing['privacy_context']
         )
         
         if coach_result and coach_result.get('response_text'):
@@ -372,65 +363,6 @@ def run_chat_pipeline(user_message: str, conversation_history: List[Dict],
     result['options'] = fallback_result.get('options', [])
     
     return result
-
-
-def generate_session_greeting(summaries: List[Dict]) -> str:
-    """
-    Generate a personalized greeting based on past session summaries.
-    Uses direct OpenAI call (not JSON format) for plain text greeting.
-    
-    Args:
-        summaries: List of past session summaries [{summary: str, created_at: int}, ...]
-    
-    Returns:
-        A personalized greeting/follow-up message
-    """
-    if not summaries:
-        return "Welcome! I'm here to support you. How are you feeling today?"
-    
-    try:
-        from openai import OpenAI
-        
-        # Build context from summaries
-        summary_text = "\n".join([f"- {s['summary']}" for s in summaries[:3]])
-        
-        client = OpenAI(api_key=os.environ.get('OPENAI_API_KEY'))
-        
-        # Note: For greetings, we use the default model (can be overridden via OPENAI_MODEL env var)
-        response = client.chat.completions.create(
-            model=OPENAI_MODEL,
-            messages=[
-                {
-                    'role': 'system',
-                    'content': '''You are a warm, caring mental health support companion. 
-Generate a brief, personalized greeting for a returning user based on their previous conversation summaries.
-
-Guidelines:
-- Keep it to 1-2 sentences
-- Reference what they discussed before in a gentle, non-intrusive way
-- Show you remember and care about their journey
-- Ask a relevant follow-up question
-- Be warm but not overly familiar
-
-Examples:
-- "Welcome back! Last time we worked on some grounding techniques for your anxiety. How have you been feeling since then?"
-- "It's good to see you again. I remember you mentioned feeling overwhelmed. How are things going now?"
-- "Hi there! We talked about some breathing exercises last time. Have you had a chance to try them?"'''
-                },
-                {
-                    'role': 'user',
-                    'content': f"Previous session summaries:\n{summary_text}\n\nGenerate a personalized greeting."
-                }
-            ],
-            max_tokens=150
-        )
-        
-        greeting = response.choices[0].message.content or ""
-        return greeting.strip()
-        
-    except Exception as e:
-        print(f"Error generating greeting: {str(e)}")
-        return "Welcome back! I'm here to support you. How are you feeling today?"
 
 
 def call_bedrock(messages: List[Dict], model: Optional[str] = None) -> str:
