@@ -436,7 +436,7 @@
     function getWelcomeHTML() {
         return `
             <div class="welcome-state" id="welcomeState">
-                <div class="welcome-icon">🌿</div>
+                <div class="welcome-icon">❋</div>
                 <h2>Welcome to SoulShield</h2>
                 <p>I'm here to listen and support you. Take your time — there's no rush.</p>
                 <div class="quick-actions">
@@ -451,7 +451,7 @@
     function getNewSessionHTML() {
         return `
             <div class="welcome-state" id="welcomeState">
-                <div class="welcome-icon">✨</div>
+                <div class="welcome-icon">○</div>
                 <h2>Fresh Start</h2>
                 <p>A new session, a new moment. I'm here whenever you're ready.</p>
                 <div class="quick-actions">
@@ -555,8 +555,8 @@
             `;
         }
 
-        // Single avatar per message
-        const avatar = role === 'user' ? '👤' : '💚';
+        // Single avatar per message - using subtle symbols
+        const avatar = role === 'user' ? '●' : '◈';
 
         const messageHTML = `
             <div class="message ${role}">
@@ -600,7 +600,7 @@
         const id = 'typing-' + Date.now();
         const html = `
             <div class="message assistant typing-message" id="${id}">
-                <div class="message-avatar">💚</div>
+                <div class="message-avatar">◈</div>
                 <div class="message-content">
                     <div class="message-bubble">
                         <div class="typing-indicator">
