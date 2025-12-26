@@ -113,21 +113,27 @@
 
     function showPage(page) {
         state.currentPage = page;
-        const mainContent = document.getElementById('mainContent');
         const chatContainer = document.querySelector('.chat-container');
         const sidebar = document.getElementById('sidebar');
+        const mainContainer = document.querySelector('.main-container');
         
-        // Hide modal pages
+        // Hide all page modals first
         document.querySelectorAll('.page-modal').forEach(m => m.style.display = 'none');
         
         if (page === 'chat') {
+            // Show chat UI
             if (chatContainer) chatContainer.style.display = 'flex';
             if (sidebar && state.isLoggedIn) sidebar.style.display = 'flex';
+            if (mainContainer) mainContainer.style.display = 'flex';
         } else {
+            // Hide chat UI and show page modal
             if (chatContainer) chatContainer.style.display = 'none';
             if (sidebar) sidebar.style.display = 'none';
+            if (mainContainer) mainContainer.style.display = 'none';
             const pageModal = document.getElementById(page + 'Page');
-            if (pageModal) pageModal.style.display = 'flex';
+            if (pageModal) {
+                pageModal.style.display = 'block';
+            }
         }
     }
 
