@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SoulShield - Hackathon Submission</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        @page {
+            size: letter;
+            margin: 0.75in;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-size: 11pt;
+            line-height: 1.7;
+            color: #333;
+            max-width: 8.5in;
+            margin: 0 auto;
+            padding: 40px;
+            background: #fff;
+        }
+        
+        @media print {
+            body {
+                padding: 0;
+            }
+        }
+        
+        .title-section {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid #7D9A6B;
+        }
+        
+        .title-section h1 {
+            font-size: 36pt;
+            font-weight: 700;
+            color: #1a1a2e;
+            margin-bottom: 10px;
+        }
+        
+        .title-section .subtitle {
+            font-size: 16pt;
+            color: #666;
+            font-weight: 400;
+        }
+        
+        .badges {
+            margin-top: 15px;
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            background: #7D9A6B;
+            color: white;
+            border-radius: 20px;
+            font-size: 9pt;
+            margin: 3px;
+        }
+        
+        .badge.blue { background: #3182ce; }
+        .badge.purple { background: #805ad5; }
+        .badge.orange { background: #dd6b20; }
+        
+        .live-demo {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f7fafc;
+            border-radius: 8px;
+        }
+        
+        .live-demo a {
+            font-size: 14pt;
+            color: #7D9A6B;
+            font-weight: 600;
+        }
+        
+        h2 {
+            font-size: 18pt;
+            font-weight: 600;
+            color: #1a1a2e;
+            margin-top: 35px;
+            margin-bottom: 15px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #e2e8f0;
+            page-break-after: avoid;
+        }
+        
+        h3 {
+            font-size: 13pt;
+            font-weight: 600;
+            color: #4a5568;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+        
+        p {
+            margin: 12px 0;
+            text-align: justify;
+        }
+        
+        strong {
+            font-weight: 600;
+            color: #1a202c;
+        }
+        
+        blockquote {
+            border-left: 4px solid #7D9A6B;
+            padding: 15px 20px;
+            margin: 20px 0;
+            background: #f7fafc;
+            font-style: italic;
+            color: #4a5568;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        ul, ol {
+            margin: 15px 0;
+            padding-left: 25px;
+        }
+        
+        li {
+            margin: 8px 0;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 10pt;
+        }
+        
+        th {
+            background: #7D9A6B;
+            color: white;
+            font-weight: 600;
+            padding: 12px 15px;
+            text-align: left;
+        }
+        
+        td {
+            padding: 10px 15px;
+            border: 1px solid #e2e8f0;
+        }
+        
+        tr:nth-child(even) {
+            background: #f7fafc;
+        }
+        
+        code {
+            font-family: 'SF Mono', Consolas, monospace;
+            font-size: 9pt;
+            background: #edf2f7;
+            padding: 2px 6px;
+            border-radius: 3px;
+            color: #7D9A6B;
+        }
+        
+        pre {
+            background: #1a1a2e;
+            color: #e2e8f0;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-size: 9pt;
+            line-height: 1.5;
+            margin: 20px 0;
+        }
+        
+        pre code {
+            background: none;
+            color: inherit;
+            padding: 0;
+        }
+        
+        a {
+            color: #7D9A6B;
+            text-decoration: none;
+        }
+        
+        hr {
+            border: none;
+            border-top: 2px solid #e2e8f0;
+            margin: 30px 0;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .stat-card {
+            background: linear-gradient(135deg, #7D9A6B, #5C7A4B);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+        }
+        
+        .stat-card .number {
+            font-size: 28pt;
+            font-weight: 700;
+        }
+        
+        .stat-card .label {
+            font-size: 10pt;
+            opacity: 0.9;
+        }
+        
+        .architecture {
+            background: #f7fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 25px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .flow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .flow-node {
+            padding: 15px 20px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 10pt;
+        }
+        
+        .flow-node.user { background: #fed7aa; border: 2px solid #dd6b20; }
+        .flow-node.router { background: #a8c49a; color: white; border: 2px solid #7D9A6B; }
+        .flow-node.coach { background: #7D9A6B; color: white; border: 2px solid #5C7A4B; }
+        .flow-node.fallback { background: #e2e8f0; border: 2px solid #a0aec0; }
+        
+        .flow-arrow {
+            font-size: 18pt;
+            color: #7D9A6B;
+        }
+        
+        .security-layers {
+            background: #1a1a2e;
+            color: #e2e8f0;
+            padding: 25px;
+            border-radius: 12px;
+            margin: 20px 0;
+        }
+        
+        .security-layer {
+            padding: 10px 15px;
+            border-left: 3px solid #7D9A6B;
+            margin: 10px 0;
+            background: rgba(125, 154, 107, 0.1);
+        }
+        
+        .toc {
+            background: #f7fafc;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        
+        .toc h3 {
+            margin-top: 0;
+        }
+        
+        .toc ol {
+            columns: 2;
+        }
+        
+        .barrier-box {
+            background: linear-gradient(135deg, #fef3c7, #fde68a);
+            border: 2px solid #f59e0b;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .barrier-box h4 {
+            color: #92400e;
+            margin-bottom: 10px;
+        }
+        
+        .bystander-example {
+            background: #f0fdf4;
+            border: 2px solid #7D9A6B;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .bystander-example .scenario {
+            background: #dcfce7;
+            padding: 10px 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            font-size: 10pt;
+        }
+        
+        .bystander-example .conversation {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+        }
+        
+        .bystander-example .user-msg {
+            background: #e0e7ff;
+            padding: 10px 15px;
+            border-radius: 12px 12px 12px 0;
+            margin-bottom: 10px;
+            display: inline-block;
+        }
+        
+        .bystander-example .ai-msg {
+            background: #f0fdf4;
+            padding: 10px 15px;
+            border-radius: 12px 12px 0 12px;
+            margin-bottom: 10px;
+            border: 1px solid #7D9A6B;
+        }
+        
+        .bystander-example .hidden-meaning {
+            background: #fef9c3;
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-size: 9pt;
+            margin-top: 15px;
+            border-left: 3px solid #eab308;
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 2px solid #e2e8f0;
+            color: #718096;
+            font-style: italic;
+        }
+        
+        @media print {
+            .no-print { display: none; }
+            h2 { page-break-after: avoid; }
+            .stat-card, .architecture, .security-layers { break-inside: avoid; }
+        }
+    </style>
+</head>
+<body>
+    <div class="title-section">
+        <h1>SoulShield</h1>
+        <div class="subtitle">A Trauma-Informed AI Support Companion for Survivors</div>
+        <div class="badges">
+            <span class="badge">Live</span>
+            <span class="badge blue">Web & Mobile</span>
+            <span class="badge purple">Multi-Agent AI</span>
+            <span class="badge orange">Enterprise Security</span>
+            <span class="badge" style="background: #00d4aa;">LangSmith</span>
+            <span class="badge" style="background: #0066ff;">Cursor AI</span>
+        </div>
+        <div class="live-demo">
+            <strong>🌐 Live Demo:</strong> <a href="https://soulshield.vercel.app">https://soulshield.vercel.app</a>
+        </div>
+    </div>
+
+    <h2>Executive Summary</h2>
+    <p><strong>SoulShield</strong> is a trauma-informed AI support companion designed to help survivors of human trafficking and domestic violence navigate their emotions between therapy sessions. Built with <strong>multiple layers of encryption</strong> and <strong>agentic AI</strong>, SoulShield addresses a critical barrier: <strong>survivors don't trust ChatGPT with their most sensitive questions</strong>.</p>
+    <p>The system was developed in collaboration with a survivor support organization in Austin, Texas, who confirmed this addresses a <strong>critical unmet need</strong>: survivors have no support during nights, weekends, and between therapy sessions when emotional distress is often most intense — and existing LLMs feel too risky for their sensitive conversations.</p>
+
+    <h2>The Problem</h2>
+    
+    <h3>The Scale of Human Trafficking</h3>
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="number">50M</div>
+            <div class="label">People trapped in modern slavery worldwide</div>
+        </div>
+        <div class="stat-card">
+            <div class="number">71%</div>
+            <div class="label">Are women and girls</div>
+        </div>
+        <div class="stat-card">
+            <div class="number">1 in 4</div>
+            <div class="label">Victims are children</div>
+        </div>
+    </div>
+    <p style="text-align: center; color: #718096; font-size: 9pt;">Source: International Labour Organization, 2024</p>
+
+    <h3>The Gap in Mental Health Support</h3>
+    <p>Survivors who escape trafficking face a long journey of healing. Professional therapy is essential — but therapy sessions typically occur only <strong>once per week for one hour</strong>. What happens during the other 167 hours?</p>
+    
+    <blockquote>
+        "If it happens after hours or on the weekend, we're obviously not here for that. The [survivors] do have a lot of emotional distress, especially in the first few weeks."<br>
+        <em>— Clinical Staff, Survivor Support Organization</em>
+    </blockquote>
+
+    <p>When survivors finally reach safety, something unexpected happens: their anxiety often <strong>increases</strong>. After years of survival mode, their body finally allows suppressed trauma to surface.</p>
+
+    <blockquote>
+        "When they come here and they are like, okay, now I'm safe, then that's when a lot of the aha moments and the flooding of real emotions come into play... their body's like, oh, finally I'm safe. And I actually get to process everything that's happened to me."<br>
+        <em>— Clinical Staff, Survivor Support Organization</em>
+    </blockquote>
+
+    <h3>Why Survivors Don't Trust ChatGPT</h3>
+    <p>AI chatbots like ChatGPT could theoretically help — but <strong>survivors won't use them</strong>. Here's why:</p>
+
+    <div class="barrier-box">
+        <h4>🔒 The Trust Barrier</h4>
+        <ul>
+            <li><strong>Hypersensitivity to Privacy Risk:</strong> Survivors' trauma history makes them acutely aware of any potential exposure. Even if ChatGPT's data leak risk is statistically minimal, they psychologically cannot take that chance.</li>
+            <li><strong>Extremely Sensitive Questions:</strong> Their conversations naturally involve the most private details — "Was I drugged?", "Is what happened to me assault?", "I don't remember what happened that night." These are questions they would <em>never</em> type into a system owned by a tech company.</li>
+            <li><strong>Fear of Conflicting Advice:</strong> What if the AI says something different from their therapist? This concern was raised directly by clinical staff: "My other concern would be that there would be conflict between what ChatGPT is telling them and what we're telling them."</li>
+        </ul>
+    </div>
+
+    <h3>Why Existing Apps Fail</h3>
+    <table>
+        <tr>
+            <th>Challenge</th>
+            <th>Why Traditional Apps Fail</th>
+        </tr>
+        <tr>
+            <td><strong>Privacy Fear</strong></td>
+            <td>Data goes to third-party servers; survivors can't verify safety</td>
+        </tr>
+        <tr>
+            <td><strong>Monitored Devices</strong></td>
+            <td>Obvious therapy language can be detected by abusers</td>
+        </tr>
+        <tr>
+            <td><strong>After-Hours Distress</strong></td>
+            <td>Panic attacks happen at 2 AM, not business hours</td>
+        </tr>
+        <tr>
+            <td><strong>Therapeutic Conflict</strong></td>
+            <td>Generic AI advice may contradict therapist's guidance</td>
+        </tr>
+        <tr>
+            <td><strong>Dissociation</strong></td>
+            <td>Survivors "check out" — they need grounding techniques, not advice</td>
+        </tr>
+    </table>
+
+    <h2>Our Solution</h2>
+    <p>SoulShield is built on two core principles: <strong>(1) Security survivors can actually trust</strong>, and <strong>(2) Supplement, never replace, professional therapy</strong>.</p>
+
+    <h3>Breaking the Trust Barrier</h3>
+    <p>We solved the privacy problem with <strong>multiple layers of encryption</strong> that make SoulShield fundamentally different from ChatGPT:</p>
+    <ul>
+        <li><strong>Client-Side Encryption:</strong> Messages are encrypted on the user's device <em>before</em> leaving their phone — not on our servers</li>
+        <li><strong>Zero-Knowledge Design:</strong> Even we cannot read their conversations</li>
+        <li><strong>Own Infrastructure:</strong> Data stays on organization-controlled servers (via Microsoft for Nonprofits), not third-party systems</li>
+        <li><strong>Auto-Delete:</strong> All data automatically purges after 30 days</li>
+    </ul>
+
+    <h3>Never Replacing the Therapist</h3>
+    <p>Our agentic AI is designed with strict guardrails to <strong>avoid therapeutic conflict</strong>:</p>
+    <ul>
+        <li>Never gives therapy advice — only supports with grounding and emotion identification</li>
+        <li>Encourages users to bring insights to their next session</li>
+        <li>Explicitly positions itself as a supplement, not a replacement</li>
+        <li>Uses the same dialectical behavioral therapy (DBT) techniques staff already teach</li>
+    </ul>
+
+    <blockquote>
+        "I always say, I think it's a good supplemental tool guide... ChatGPT has all the knowledge of all therapeutic modalities, so it could offer some sort of guidance and tools that could be helpful in a moment of mental health crisis."<br>
+        <em>— Clinical Staff, Survivor Support Organization</em>
+    </blockquote>
+
+    <h3>Three Modes of Support</h3>
+    <ol>
+        <li><strong>Grounding Mode</strong> — Box breathing, 5-4-3-2-1 sensory exercises when overwhelmed. Uses the same techniques clinical staff teach: ice packs for vagus nerve, bilateral stimulation, sensory grounding.</li>
+        <li><strong>Emotion Exploration</strong> — Helps name feelings without giving advice. Mirrors the "feelings wheel" approach used in therapy: "If somebody does not recognize what they're feeling, they don't know how to process those feelings."</li>
+        <li><strong>Session Preparation</strong> — Organizes thoughts and identifies emotions for the next therapy appointment. Helps maximize the value of their one hour per week with their therapist.</li>
+    </ol>
+
+    <h2>Bystander-Safe Mode</h2>
+    <p>Many survivors are still in dangerous situations. Some have abusers who monitor their devices. Others may be <strong>physically beside their trafficker</strong> while using the app. SoulShield handles both scenarios.</p>
+
+    <h3>Scenario A: Device Monitoring</h3>
+    <p>When users indicate someone might check their phone later ("He reads all my messages"), SoulShield automatically uses neutral wellness language:</p>
+    <blockquote>
+        <strong>User:</strong> "He checks my phone every night. I'm having a hard day."<br><br>
+        <strong>SoulShield:</strong> "I hear you — some days are just harder than others. Would you like to try a quick mindfulness moment together? Let's take a slow breath in... and out."
+    </blockquote>
+    <p><em>Notice: No words like "abuse," "escape," or "therapy." To anyone checking the phone, it looks like a generic wellness app.</em></p>
+
+    <h3>Scenario B: Trafficker Physically Present</h3>
+    <p>In the most dangerous situations, the trafficker may be <strong>sitting right beside them</strong>. The survivor needs support, information about their rights, and mental survival strategies — but the trafficker is watching the screen. SoulShield communicates in a way the survivor understands but the trafficker won't suspect.</p>
+
+    <div class="bystander-example">
+        <div class="scenario">
+            <strong>🚨 Situation:</strong> A survivor is being held by their trafficker. They cannot leave, speak freely, or ask direct questions. They open the app while the trafficker is nearby, pretending it's a wellness app.
+        </div>
+        <div class="conversation">
+            <div class="user-msg">
+                <strong>User:</strong> "I'm at my job and I can't leave right now. My manager is very strict about breaks. I just need something to help me get through the day."
+            </div>
+            <div class="ai-msg">
+                <strong>SoulShield:</strong> "I understand — some work environments can feel really confining. Let's try something that might help you feel more centered right now.<br><br>
+                Take a slow breath with me: in for 4... hold for 4... out for 4.<br><br>
+                Remember: <strong>you always have the right to take breaks and care for yourself.</strong> Your wellbeing matters, and what you're feeling is completely valid. Sometimes just knowing you have options, even small ones, can help you get through difficult moments.<br><br>
+                Would you like to try another breathing exercise, or would it help to think about something you're looking forward to?"
+            </div>
+        </div>
+        <div class="hidden-meaning">
+            <strong>🔍 What the trafficker sees:</strong> A wellness app offering breathing exercises — completely normal.<br><br>
+            <strong>💚 What the survivor understands:</strong> "You have the right to take breaks" = You have rights. "You have options" = There are ways out. "Your wellbeing matters" = You deserve better than this. The app is affirming their humanity and subtly reminding them they have agency — without triggering suspicion.
+        </div>
+    </div>
+
+    <p>The agentic AI automatically detects privacy signals like "I can't talk freely," "Someone is nearby," or "Keep it simple" and adjusts its language accordingly — providing mental support and subtle empowerment without endangering the survivor.</p>
+
+    <h2>Technical Architecture</h2>
+    
+    <h3>Multi-Agent AI Pipeline</h3>
+    <p>SoulShield uses an <strong>agentic AI architecture</strong> to automatically detect the user's situation and respond appropriately:</p>
+    <div class="architecture">
+        <div class="flow">
+            <div class="flow-node user">You<br><small>Share message</small></div>
+            <span class="flow-arrow">→</span>
+            <div class="flow-node router">Safety Router<br><small>Classifies privacy & risk</small></div>
+            <span class="flow-arrow">→</span>
+            <div class="flow-node coach">Support Coach<br><small>Trauma-informed response</small></div>
+            <span class="flow-arrow">→</span>
+            <div class="flow-node fallback">Safety Fallback<br><small>Catches errors</small></div>
+        </div>
+    </div>
+
+    <p><strong>The Routing Agent</strong> analyzes each message and determines:</p>
+    <ul>
+        <li><strong>Mode:</strong> Grounding, emotion exploration, therapy prep, or crisis resources</li>
+        <li><strong>Privacy Context:</strong> Private, bystander possible, or bystander present</li>
+        <li><strong>Risk Level:</strong> Low, medium, or high (triggers crisis resources when needed)</li>
+    </ul>
+
+    <h3>Tech Stack</h3>
+    <table>
+        <tr>
+            <th>Layer</th>
+            <th>Technology</th>
+        </tr>
+        <tr>
+            <td>Development</td>
+            <td>Cursor AI (AI-assisted development)</td>
+        </tr>
+        <tr>
+            <td>Frontend</td>
+            <td>Vanilla JS, Vercel, Web Speech API</td>
+        </tr>
+        <tr>
+            <td>Backend</td>
+            <td>AWS Lambda, API Gateway, DynamoDB</td>
+        </tr>
+        <tr>
+            <td>AI / LLM</td>
+            <td>OpenAI GPT-4, LangSmith (prompt management & evaluation)</td>
+        </tr>
+        <tr>
+            <td>Security</td>
+            <td>AES-256-GCM encryption, CSP, Trusted Types</td>
+        </tr>
+    </table>
+
+    <h2>Security & Privacy</h2>
+    <p>For trafficking survivors, data exposure can be <strong>life-threatening</strong>. This isn't theoretical — abusers actively monitor devices. We implemented 5 layers of protection to build the trust survivors need:</p>
+    
+    <div class="security-layers">
+        <div class="security-layer">
+            <strong>Layer 5: Data Minimization</strong><br>
+            No PII required • Anonymous usernames • 30-day auto-delete
+        </div>
+        <div class="security-layer">
+            <strong>Layer 4: Authentication</strong><br>
+            PBKDF2 password hashing • Session tokens • API key auth
+        </div>
+        <div class="security-layer">
+            <strong>Layer 3: Transport Security</strong><br>
+            HTTPS everywhere • TLS 1.3 • AWS internal encryption
+        </div>
+        <div class="security-layer">
+            <strong>Layer 2: XSS Protection</strong><br>
+            Content Security Policy • Trusted Types • HTML sanitization
+        </div>
+        <div class="security-layer">
+            <strong>Layer 1: Client-Side Encryption</strong><br>
+            AES-256-GCM • PBKDF2 key derivation • Zero-knowledge design
+        </div>
+    </div>
+
+    <p>The key difference from ChatGPT: <strong>encryption happens on the user's device</strong>, not our servers. Even if someone accessed our database, they would see only encrypted gibberish. The user's password never leaves their device — only they can decrypt their own conversations.</p>
+
+    <h2>Stakeholder Validation</h2>
+    <p>Austin AI Hub conducted multiple meetings with a survivor support organization. Their clinical staff validated every aspect of our approach and confirmed this addresses a real, unmet need:</p>
+    
+    <blockquote>
+        "This is such a wonderful idea... My brain was already there a few months ago, thinking like, there should be something that helps people supplementally with their therapist."<br>
+        <em>— Clinical Staff, Survivor Support Organization</em>
+    </blockquote>
+
+    <blockquote>
+        "I feel like if it's offering you specific guidelines like DBT skills, we can say we can calm down and then bring this up with your therapist and then they can figure that out together like with a literal mental health professional. So I feel like that's really cool."<br>
+        <em>— Clinical Staff, Survivor Support Organization</em>
+    </blockquote>
+
+    <h2>Key Features</h2>
+    <ul>
+        <li><strong>Client-Side Encryption</strong> — Survivors can actually trust this with sensitive questions</li>
+        <li><strong>Multi-Agent AI Pipeline</strong> — Automatic situation detection and mode switching</li>
+        <li><strong>Bystander-Safe Mode</strong> — Neutral language when privacy is compromised</li>
+        <li><strong>Therapy Supplement Design</strong> — Never conflicts with therapist guidance</li>
+        <li><strong>Voice Input/Output</strong> — For users who can't safely type</li>
+        <li><strong>Dark Mode</strong> — Less conspicuous at night</li>
+        <li><strong>Crisis Resources</strong> — 24/7 hotlines when high risk detected</li>
+        <li><strong>Mobile Responsive</strong> — Optimized for phones</li>
+        <li><strong>24/7 Availability</strong> — Support when therapists aren't available</li>
+    </ul>
+
+    <h2>Impact & Metrics</h2>
+    <table>
+        <tr>
+            <th>Metric</th>
+            <th>Result</th>
+        </tr>
+        <tr>
+            <td>Routing Accuracy</td>
+            <td>94%</td>
+        </tr>
+        <tr>
+            <td>Bystander Safety</td>
+            <td>100%</td>
+        </tr>
+        <tr>
+            <td>Schema Compliance</td>
+            <td>100%</td>
+        </tr>
+        <tr>
+            <td>Response Latency</td>
+            <td>1.8s avg</td>
+        </tr>
+    </table>
+
+    <h2>Development Tools & Prompt Engineering</h2>
+    <p>SoulShield was built using modern AI development tools that enabled rapid iteration and rigorous testing:</p>
+
+    <h3>Development with Cursor AI</h3>
+    <p><strong>Cursor AI</strong> served as our primary development environment, accelerating the entire development process. Cursor's AI-assisted coding capabilities helped us:</p>
+    <ul>
+        <li>Rapidly prototype the multi-agent pipeline architecture</li>
+        <li>Implement complex encryption schemes with security best practices</li>
+        <li>Debug and optimize Lambda functions for low latency</li>
+        <li>Generate comprehensive test cases for edge scenarios</li>
+    </ul>
+
+    <h3>Prompt Optimization with LangSmith</h3>
+    <p><strong>LangSmith</strong> by LangChain was critical for developing and evaluating our trauma-informed AI prompts. We used LangSmith's prompt management and evaluation capabilities to iterate toward prompts that are both safe and effective.</p>
+
+    <div class="architecture" style="text-align: left;">
+        <h4 style="margin-top: 0; color: #1a1a2e;">Prompt Engineering Pipeline</h4>
+        <table style="margin: 15px 0;">
+            <tr>
+                <th>Prompt</th>
+                <th>Purpose</th>
+                <th>Iterations</th>
+            </tr>
+            <tr>
+                <td><code>routing_agent_prompt</code></td>
+                <td>Classifies user messages → mode, privacy context, risk level</td>
+                <td>5 commits</td>
+            </tr>
+            <tr>
+                <td><code>support_coach</code></td>
+                <td>Generates trauma-informed, bystander-safe responses</td>
+                <td>8 commits</td>
+            </tr>
+            <tr>
+                <td><code>safety_fallback</code></td>
+                <td>Provides safe response when other agents fail</td>
+                <td>4 commits</td>
+            </tr>
+            <tr>
+                <td><code>generate_session_greeting</code></td>
+                <td>Creates warm, non-intrusive session openings</td>
+                <td>2 commits</td>
+            </tr>
+        </table>
+        <p style="font-size: 9pt; color: #718096;">All prompts version-controlled and managed through LangSmith Hub</p>
+    </div>
+
+    <h3>Evaluation & Testing</h3>
+    <p>We created custom evaluation datasets in LangSmith to systematically test bystander safety and routing accuracy:</p>
+
+    <table>
+        <tr>
+            <th>Dataset</th>
+            <th>Examples</th>
+            <th>Purpose</th>
+        </tr>
+        <tr>
+            <td><code>SingleTurn_Bystander</code></td>
+            <td>39 examples</td>
+            <td>Test bystander detection and safe language generation</td>
+        </tr>
+        <tr>
+            <td><code>soulshield_dataset_initial</code></td>
+            <td>15 examples</td>
+            <td>Core routing and response quality evaluation</td>
+        </tr>
+        <tr>
+            <td><code>souldshield-multiturn</code></td>
+            <td>4 examples</td>
+            <td>Multi-turn conversation coherence</td>
+        </tr>
+    </table>
+
+    <div class="stats-grid" style="margin-top: 20px;">
+        <div class="stat-card">
+            <div class="number">289</div>
+            <div class="label">Total tracing runs in LangSmith</div>
+        </div>
+        <div class="stat-card">
+            <div class="number">0%</div>
+            <div class="label">Error rate across all runs</div>
+        </div>
+        <div class="stat-card">
+            <div class="number">19</div>
+            <div class="label">Total prompt iterations</div>
+        </div>
+    </div>
+
+    <h3>Key Prompt Optimization Insights</h3>
+    <p>Through iterative testing with LangSmith, we discovered critical improvements:</p>
+    <ol>
+        <li><strong>"Robotic Therapist" Problem:</strong> Early prompts produced scripted, clinical responses. We removed prescriptive rules and added instructions to mirror the user's natural language.</li>
+        <li><strong>Subtle Bystander Detection:</strong> Users don't say "someone is watching." They say "he checks my phone." We built a dataset of 39 real-world signals to train subtle detection.</li>
+        <li><strong>Avoiding Therapeutic Conflict:</strong> The support_coach prompt went through 8 iterations to ensure it never gives advice — only supports, grounds, and prepares for therapy.</li>
+    </ol>
+
+    <h2>Future Roadmap</h2>
+    <ul>
+        <li><strong>Q1 2026:</strong> Guided grounding exercises with audio, offline mode, interactive feelings wheel</li>
+        <li><strong>Q2 2026:</strong> Therapist dashboard (optional session prep summaries), pattern recognition, multi-language support</li>
+        <li><strong>Future:</strong> Clinical validation studies, HIPAA compliance certification, white-label version for organizations</li>
+    </ul>
+
+    <h2>References</h2>
+    <ol>
+        <li>International Labour Organization (2024). <em>Global Estimates of Modern Slavery: Forced Labour and Forced Marriage.</em> Geneva: ILO. <a href="https://www.ilo.org/global/topics/forced-labour/publications" target="_blank">https://www.ilo.org/</a></li>
+        <li>Linehan, M. M. (2014). <em>DBT Skills Training Manual.</em> New York: Guilford Press. — Foundation for dialectical behavioral therapy techniques used in grounding mode.</li>
+        <li>Van der Kolk, B. (2014). <em>The Body Keeps the Score: Brain, Mind, and Body in the Healing of Trauma.</em> New York: Viking. — Informs our understanding of dissociation and grounding needs.</li>
+        <li>Polyvagal Theory (Porges, S. W.) — Basis for vagus nerve stimulation techniques referenced by clinical partners.</li>
+        <li>LangChain (2024). <em>LangSmith Documentation: Prompt Management and Evaluation.</em> <a href="https://docs.smith.langchain.com/" target="_blank">https://docs.smith.langchain.com/</a></li>
+        <li>OpenAI (2024). <em>GPT-4 Technical Report.</em> <a href="https://openai.com/research/gpt-4" target="_blank">https://openai.com/research/gpt-4</a></li>
+        <li>NIST (2001). <em>Advanced Encryption Standard (AES).</em> FIPS PUB 197. — Basis for AES-256-GCM encryption implementation.</li>
+        <li>Survivor Support Organization, Austin, TX (2024). <em>Stakeholder Interview.</em> December 19, 2024. — Primary source for clinical insights and validation.</li>
+    </ol>
+
+    <div class="footer">
+        <p><strong>SoulShield</strong></p>
+        <p>The AI companion survivors can actually trust.</p>
+        <p style="margin-top: 10px; font-size: 10pt;">Support that hides in plain sight. Security they can verify. Therapy they can trust.</p>
+        <p style="margin-top: 15px;"><a href="https://soulshield.vercel.app">https://soulshield.vercel.app</a></p>
+    </div>
+
+
+</body>
+</html>

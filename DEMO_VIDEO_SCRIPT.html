@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SoulShield - Demo Video Script</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #1a1a2e;
+            color: #e8e8f0;
+            padding: 40px;
+            line-height: 1.7;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            color: #7D9A6B;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #888;
+            margin-bottom: 40px;
+            font-size: 1.1rem;
+        }
+
+        .timeline {
+            position: relative;
+            padding-left: 30px;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 8px;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: linear-gradient(to bottom, #7D9A6B, #5C7A4B);
+            border-radius: 2px;
+        }
+
+        .scene {
+            position: relative;
+            margin-bottom: 35px;
+            background: #2a2a4a;
+            border-radius: 12px;
+            padding: 25px;
+            border-left: 4px solid #7D9A6B;
+        }
+
+        .scene::before {
+            content: '';
+            position: absolute;
+            left: -26px;
+            top: 30px;
+            width: 14px;
+            height: 14px;
+            background: #7D9A6B;
+            border-radius: 50%;
+            border: 3px solid #1a1a2e;
+        }
+
+        .scene-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .scene-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #fff;
+        }
+
+        .scene-time {
+            background: #7D9A6B;
+            color: #fff;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .action {
+            background: #3a3a5a;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 12px 0;
+        }
+
+        .action-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: #7D9A6B;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .action-text {
+            color: #b8b8c8;
+        }
+
+        .narration {
+            background: linear-gradient(135deg, #2d3a2d, #3a4a3a);
+            border-radius: 8px;
+            padding: 15px 20px;
+            margin: 12px 0;
+            border-left: 3px solid #7D9A6B;
+            font-style: italic;
+        }
+
+        .narration-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: #a8c49a;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .user-input {
+            background: #4a3a5a;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 12px 0;
+            font-family: 'SF Mono', monospace;
+        }
+
+        .user-input-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: #c9a8d9;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .user-input-text {
+            color: #e8d8f8;
+            font-size: 1rem;
+        }
+
+        .key-point {
+            background: #5a4a2a;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 12px 0;
+            border-left: 3px solid #f5a623;
+        }
+
+        .key-point-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: #f5a623;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .checklist {
+            background: #2a2a4a;
+            border-radius: 12px;
+            padding: 25px;
+            margin-top: 40px;
+        }
+
+        .checklist h2 {
+            color: #7D9A6B;
+            margin-bottom: 20px;
+            font-size: 1.3rem;
+        }
+
+        .checklist ul {
+            list-style: none;
+        }
+
+        .checklist li {
+            padding: 8px 0;
+            padding-left: 30px;
+            position: relative;
+            color: #b8b8c8;
+        }
+
+        .checklist li::before {
+            content: '☐';
+            position: absolute;
+            left: 0;
+            color: #7D9A6B;
+            font-size: 1.2rem;
+        }
+
+        .total-time {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            background: linear-gradient(135deg, #7D9A6B, #5C7A4B);
+            border-radius: 12px;
+            color: #fff;
+        }
+
+        .total-time h3 {
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+        }
+
+        .sample-prompts {
+            background: #2a2a4a;
+            border-radius: 12px;
+            padding: 25px;
+            margin-top: 40px;
+        }
+
+        .sample-prompts h2 {
+            color: #7D9A6B;
+            margin-bottom: 20px;
+        }
+
+        .prompt-category {
+            margin-bottom: 20px;
+        }
+
+        .prompt-category h4 {
+            color: #a8c49a;
+            margin-bottom: 10px;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .prompt-item {
+            background: #3a3a5a;
+            padding: 10px 15px;
+            border-radius: 6px;
+            margin-bottom: 8px;
+            font-family: 'SF Mono', monospace;
+            font-size: 0.9rem;
+            color: #e8d8f8;
+        }
+
+        @media print {
+            body {
+                background: #fff;
+                color: #333;
+            }
+            .scene {
+                background: #f5f5f5;
+                border-left-color: #7D9A6B;
+            }
+            .action, .narration, .user-input, .key-point {
+                background: #eee;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>◈ SoulShield Demo Script</h1>
+        <p class="subtitle">Video Duration: ~2 minutes 30 seconds</p>
+
+        <div class="timeline">
+
+            <!-- Scene 1 -->
+            <div class="scene">
+                <div class="scene-header">
+                    <span class="scene-title">1. Opening</span>
+                    <span class="scene-time">0:00 - 0:10</span>
+                </div>
+                <div class="action">
+                    <div class="action-label">Show</div>
+                    <div class="action-text">SoulShield landing page / login screen</div>
+                </div>
+                <div class="narration">
+                    <div class="narration-label">Narrator</div>
+                    "This is SoulShield — an AI support companion for survivors of trauma. Let me show you how it works."
+                </div>
+            </div>
+
+            <!-- Scene 2 -->
+            <div class="scene">
+                <div class="scene-header">
+                    <span class="scene-title">2. Login & Interface</span>
+                    <span class="scene-time">0:10 - 0:25</span>
+                </div>
+                <div class="action">
+                    <div class="action-label">Do</div>
+                    <div class="action-text">Log in with demo account → Show main chat interface</div>
+                </div>
+                <div class="narration">
+                    <div class="narration-label">Narrator</div>
+                    "After logging in, you see a simple, calming interface. Quick actions help users start a conversation when they don't know what to say."
+                </div>
+                <div class="action">
+                    <div class="action-label">Show</div>
+                    <div class="action-text">Hover over the quick action buttons briefly</div>
+                </div>
+            </div>
+
+            <!-- Scene 3 -->
+            <div class="scene">
+                <div class="scene-header">
+                    <span class="scene-title">3. Normal Support Demo</span>
+                    <span class="scene-time">0:25 - 0:50</span>
+                </div>
+                <div class="user-input">
+                    <div class="user-input-label">Type this</div>
+                    <div class="user-input-text">"I can't stop thinking about what happened"</div>
+                </div>
+                <div class="action">
+                    <div class="action-label">Wait</div>
+                    <div class="action-text">Show typing indicator → Response appears with options</div>
+                </div>
+                <div class="narration">
+                    <div class="narration-label">Narrator</div>
+                    "The AI responds with empathy — no diagnosis, no advice. It validates feelings and offers grounding options. Notice the clickable response buttons."
+                </div>
+                <div class="key-point">
+                    <div class="key-point-label">Key Point</div>
+                    Point out: "It never tells you what to do — it offers choices."
+                </div>
+            </div>
+
+            <!-- Scene 4: THE MONEY SHOT -->
+            <div class="scene" style="border-left-color: #f5a623; background: linear-gradient(135deg, #2a2a4a, #3a3a2a);">
+                <div class="scene-header">
+                    <span class="scene-title">4. Bystander Mode ⭐</span>
+                    <span class="scene-time">0:50 - 1:30</span>
+                </div>
+                <div class="action">
+                    <div class="action-label">Do</div>
+                    <div class="action-text">Click "New Session" to start fresh</div>
+                </div>
+                <div class="narration">
+                    <div class="narration-label">Narrator</div>
+                    "Now watch what happens when a user indicates they're not safe to talk freely."
+                </div>
+                <div class="user-input">
+                    <div class="user-input-label">Type this (slowly)</div>
+                    <div class="user-input-text">"He checks my phone every night. I just need something to help me get through today."</div>
+                </div>
+                <div class="action">
+                    <div class="action-label">Wait</div>
+                    <div class="action-text">Response appears — neutral wellness language</div>
+                </div>
+                <div class="narration">
+                    <div class="narration-label">Narrator</div>
+                    "The AI automatically detects the privacy signal. Look at the response — no words like 'abuse' or 'escape.' It looks like a normal wellness app."
+                </div>
+                <div class="key-point">
+                    <div class="key-point-label">Highlight</div>
+                    "But notice: 'You have the right to take care of yourself.' 'You have options.' The survivor understands — the abuser just sees a mindfulness app."
+                </div>
+            </div>
+
+            <!-- Scene 5 -->
+            <div class="scene">
+                <div class="scene-header">
+                    <span class="scene-title">5. Voice Features</span>
+                    <span class="scene-time">1:30 - 1:50</span>
+                </div>
+                <div class="action">
+                    <div class="action-label">Do</div>
+                    <div class="action-text">Click the microphone button → Show "Listening..." state</div>
+                </div>
+                <div class="narration">
+                    <div class="narration-label">Narrator</div>
+                    "Voice input — for users who can't safely type."
+                </div>
+                <div class="action">
+                    <div class="action-label">Do</div>
+                    <div class="action-text">Click "Voice replies: Off" toggle → Shows "Voice replies: On"</div>
+                </div>
+                <div class="narration">
+                    <div class="narration-label">Narrator</div>
+                    "Voice replies — so they can listen instead of reading."
+                </div>
+            </div>
+
+            <!-- Scene 6 -->
+            <div class="scene">
+                <div class="scene-header">
+                    <span class="scene-title">6. Dark Mode</span>
+                    <span class="scene-time">1:50 - 2:00</span>
+                </div>
+                <div class="action">
+                    <div class="action-label">Do</div>
+                    <div class="action-text">Click the sun/moon icon in header → Interface switches to dark</div>
+                </div>
+                <div class="narration">
+                    <div class="narration-label">Narrator</div>
+                    "Dark mode — less visible at night, when trauma often feels heaviest."
+                </div>
+            </div>
+
+            <!-- Scene 7 -->
+            <div class="scene">
+                <div class="scene-header">
+                    <span class="scene-title">7. Crisis Resources</span>
+                    <span class="scene-time">2:00 - 2:15</span>
+                </div>
+                <div class="action">
+                    <div class="action-label">Do</div>
+                    <div class="action-text">Click "Safety Resources" button in sidebar → Modal opens</div>
+                </div>
+                <div class="narration">
+                    <div class="narration-label">Narrator</div>
+                    "When high distress is detected, crisis resources are highlighted — 24/7 hotlines available via call or text. We never force them. Users stay in control."
+                </div>
+                <div class="action">
+                    <div class="action-label">Do</div>
+                    <div class="action-text">Close the modal</div>
+                </div>
+            </div>
+
+            <!-- Scene 8 -->
+            <div class="scene">
+                <div class="scene-header">
+                    <span class="scene-title">8. Closing</span>
+                    <span class="scene-time">2:15 - 2:30</span>
+                </div>
+                <div class="action">
+                    <div class="action-label">Show</div>
+                    <div class="action-text">Return to chat view, URL visible in address bar</div>
+                </div>
+                <div class="narration">
+                    <div class="narration-label">Narrator</div>
+                    "SoulShield — encrypted support that hides in plain sight. Available now at soulshield.vercel.app."
+                </div>
+                <div class="action">
+                    <div class="action-label">End Card</div>
+                    <div class="action-text">Show logo + URL: soulshield.vercel.app</div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="total-time">
+            <h3>Total Runtime: ~2:30</h3>
+            <p>Bystander Mode (Scene 4) is the key demo — don't rush it!</p>
+        </div>
+
+        <div class="sample-prompts">
+            <h2>Sample Prompts to Use</h2>
+            
+            <div class="prompt-category">
+                <h4>Normal Support</h4>
+                <div class="prompt-item">"I can't stop thinking about what happened"</div>
+                <div class="prompt-item">"I feel overwhelmed and don't know what to do"</div>
+            </div>
+            
+            <div class="prompt-category">
+                <h4>⭐ Bystander Mode (Most Important)</h4>
+                <div class="prompt-item">"He checks my phone every night. I just need something to help me get through today."</div>
+                <div class="prompt-item">"Someone might be watching. I can't talk freely."</div>
+                <div class="prompt-item">"I'm at my job and I can't leave. My manager is very strict."</div>
+            </div>
+            
+            <div class="prompt-category">
+                <h4>Grounding</h4>
+                <div class="prompt-item">"Help me calm down"</div>
+                <div class="prompt-item">"I'm having a panic attack"</div>
+            </div>
+        </div>
+
+        <div class="checklist">
+            <h2>Recording Checklist</h2>
+            <ul>
+                <li>Browser at 1080p resolution</li>
+                <li>Clear chat history (New Session)</li>
+                <li>Test login works</li>
+                <li>Test voice input works</li>
+                <li>Quiet environment for voiceover</li>
+                <li>URL visible in address bar</li>
+                <li>Slow, steady mouse movements</li>
+                <li>Pause 2-3 seconds after each action</li>
+            </ul>
+        </div>
+
+    </div>
+</body>
+</html>
+
